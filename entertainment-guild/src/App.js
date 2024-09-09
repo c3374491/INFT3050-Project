@@ -13,11 +13,13 @@ import Management from "./pages/Management";
 import ManageUsers from "./pages/ManageUsers";
 import ManageProducts from "./pages/ManageProducts";
 import NavBarUsers from "./component/NavBarUsers";
+import NavBarAdmin from "./component/NavBarAdmin";
 
 const App = () => {
   return (
     <>
       <NavBarUsers />
+      <NavBarAdmin />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

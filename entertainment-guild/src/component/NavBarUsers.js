@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
+import cartIcon from "../assets/images/cart-icon.png"
 
-const NavBar = () => {
+const NavBarUsers = () => {
     return (
         <AppBar position="static">
             <Toolbar>
@@ -44,7 +45,7 @@ const NavBar = () => {
                     </Box>
                     <Button color="inherit">
                         <NavLink to="/cart" style={{ textDecoration: 'none', color: 'white' }}>
-                            Cart
+                            <img src={cartIcon}  alt={"Cart Logo"} width={35}/>
                         </NavLink>
                     </Button>
                     <Button color="inherit">
@@ -58,4 +59,4 @@ const NavBar = () => {
     );
 };
 
-export default NavBar;
+export default NavBarUsers;

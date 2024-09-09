@@ -31,15 +31,18 @@ const Movies = () => {
         fetchMovies();
     }, []);
 
-    const filteredMovies = movies.filter(book => book.SubGenre === 3); // Filter movies based on SubGenre
+    const filteredMovies = movies.filter(movie => movie.SubGenre === 3); // Filter movies based on SubGenre
 
     return (
         <div>
             <h1>Movies</h1>
             {filteredMovies.length > 0 ? (
                 <ul>
-                    {filteredMovies.map((book, index) => (
-                        <li key={index}>{book.Name}</li>
+                    {filteredMovies.map((movie, index) => (
+                        <li key={index}>
+                            <strong>{movie.Name}</strong>
+                            <p>{movie.Description}</p>
+                        </li>
                     ))}
                 </ul>
             ) : (

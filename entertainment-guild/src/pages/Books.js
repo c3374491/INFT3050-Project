@@ -39,7 +39,10 @@ const Books = () => {
             {filteredBooks.length > 0 ? (
                 <ul>
                     {filteredBooks.map((book, index) => (
-                        <li key={index}>{book.Name}</li>
+                        <li key={index}>
+                            <strong>{book.Name}</strong>
+                            <p>{book.Description}</p>
+                        </li>
                     ))}
                 </ul>
             ) : (

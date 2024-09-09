@@ -31,15 +31,18 @@ const Games = () => {
         fetchGames();
     }, []);
 
-    const filteredGames = games.filter(book => book.SubGenre === 2); // Filter games based on SubGenre
+    const filteredGames = games.filter(game => game.SubGenre === 2); // Filter games based on SubGenre
 
     return (
         <div>
             <h1>Games</h1>
             {filteredGames.length > 0 ? (
                 <ul>
-                    {filteredGames.map((book, index) => (
-                        <li key={index}>{book.Name}</li>
+                    {filteredGames.map((game, index) => (
+                        <li key={index}>
+                            <strong>{game.Name}</strong>
+                            <p>{game.Description}</p>
+                        </li>
                     ))}
                 </ul>
             ) : (

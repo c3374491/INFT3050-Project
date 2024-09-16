@@ -8,18 +8,18 @@ const Games = () => {
     useEffect(() => {
         const fetchGames = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/v1/db/data/v1/inft3050/Product', {
+                const response = await axios.get('http://localhost:8080/api/v1/db/data/v1/inft3050/Genre/3', {
                     headers: {
                         'Accept': 'application/json',
                         'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
                     }
                 });
-                console.log('API Response:', response.data); // Vérifie la réponse
-                // Accède au tableau `list` dans la réponse
-                if (Array.isArray(response.data.list)) {
-                    setGames(response.data.list);
+                console.log('API Response:', response.data["Product List"]);// Check the response
+                // Access to the list array of the response
+                if (Array.isArray(response.data["Product List"])) {
+                    setGames(response.data["Product List"]);
                 } else {
-                    console.warn('Expected array in list but got:', response.data.list);
+                    console.warn('Expected array in list but got:', response.data["Product List"]);
                     setGames([]);
                 }
             } catch (error) {
@@ -31,14 +31,12 @@ const Games = () => {
         fetchGames();
     }, []);
 
-    const filteredGames = games.filter(game => game.SubGenre === 2); // Filter games based on SubGenre
-
     return (
         <div>
             <h1>Games</h1>
-            {filteredGames.length > 0 ? (
+            {games.length > 0 ? (
                 <ul>
-                    {filteredGames.map((game, index) => (
+                    {games.map((game, index) => (
                         <li key={index}>
                             <strong>{game.Name}</strong>
                             <p>{game.Description}</p>

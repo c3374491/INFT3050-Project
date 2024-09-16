@@ -19,7 +19,6 @@ const App = () => {
   return (
     <>
       <NavBarUsers />
-      <NavBarAdmin />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

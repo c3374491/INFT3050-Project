@@ -18,3 +18,13 @@
 .productDescription {
     width: 75%;
 }
+
+h1 {
+    width: 100%;
+    text-align: center;
+}
+
+.infoAndCart {
+    display: flex;
+    flex-direction: column;
+}

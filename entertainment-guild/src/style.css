@@ -1,0 +1,20 @@
+.productStyle {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 30px;
+    margin-left:3%;
+    margin-right: 3%;
+    padding : 10px;
+    border-radius: 30px;
+    background-color: #92a69d;
+}
+.bookInfo {
+    display: flex;
+    flex-direction: column;
+    width: 19%;
+    align-items: center;
+}
+.productDescription {
+    width: 75%;
+}

@@ -5,50 +5,25 @@ import "../style.css"
 const Books = () => {
     const [books, setBooks] = useState([]);
     const [error, setError] = useState(null);
-    const [bookDetails, setBookDetails] = useState(null)
 
     useEffect(() => {
         const fetchBooks = async () => {
             try {
                 // Get the list of books
-                const response = await axios.get('http://localhost:8080/api/v1/db/data/v1/inft3050/Genre/1', {
+                const response = await axios.get('http://localhost:8080/api/v1/db/data/v1/inft3050/Product', {
                     headers: {
                         'Accept': 'application/json',
                         'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
                     }
                 });
 
-                console.log('fetch book API Response:', response.data["Product List"]);
+                console.log('fetch product API Response:', response.data);
 
-                if (Array.isArray(response.data["Product List"])) {
-                    // Get the details for the books
-                    const booksWithDetails = await Promise.all(
-                        response.data["Product List"].map(async (book) => {
-                            try {
-                                const detailsResponse = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/Product/${book.ID}`, {
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
-                                    }
-                                });
-                                // Return the book and its details
-                                return {
-                                    ...book,
-                                    Description: detailsResponse.data.Description,
-                                    Author: detailsResponse.data.Author
-                                };
-                            } catch (error) {
-                                console.error(`Error fetching details for book ID ${book.ID}:`, error);
-                                return {
-                                    ...book,
-                                    Description: 'Description not available'
-                                };
-                            }
-                        })
-                    );
-                    setBooks(booksWithDetails);
+                if (Array.isArray(response.data.list)) {
+                    const books = response.data.list.filter(product => product.Genre === 1)
+                    setBooks(books);
                 } else {
-                    console.warn('Expected array in Product List but got:', response.data["Product List"]);
+                    console.warn('Expected array in Product List but got:', response.data.list);
                     setBooks([]);
                 }
             } catch (error) {

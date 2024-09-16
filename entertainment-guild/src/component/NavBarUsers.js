@@ -5,7 +5,7 @@ import cartIcon from "../assets/images/cart-icon.png"
 
 const NavBarUsers = () => {
     return (
-        <AppBar position="static">
+        <AppBar position="sticky">
             <Toolbar>
                 <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center' }}>
                     {/* Logo with link */}

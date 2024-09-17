@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
 import cartIcon from "../assets/images/cart-icon.png"
+import NavBarSearch from './NavBarSearch';
 
 const NavBarUsers = () => {
     return (
@@ -16,14 +17,7 @@ const NavBarUsers = () => {
                     </Typography>
 
                     {/* Search bar */}
-                    <Box sx={{ flexGrow: 1 }}>
-                        <TextField
-                            variant="outlined"
-                            size="small"
-                            placeholder="Search..."
-                            sx={{ width: '100%', maxWidth: 400 }}
-                        />
-                    </Box>
+                    <NavBarSearch />
 
                     {/* Navigation links */}
                     <Box sx={{ display: 'flex', gap:4,flexGrow:1 }}>

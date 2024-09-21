@@ -14,6 +14,7 @@ import ManageUsers from "./pages/ManageUsers";
 import ManageProducts from "./pages/ManageProducts";
 import NavBarUsers from "./component/NavBarUsers";
 import NavBarAdmin from "./component/NavBarAdmin";
+import SearchBarResults from './pages/SearchBarResults.js';
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/management" element={<Management />} />
         <Route path="/manageusers" element={<ManageUsers />} />
         <Route path="/manageproducts" element={<ManageProducts />} />
+		<Route path="/results" element={<SearchBarResults />} />
         <Route path="*" element={<ErrorNotFound />} />
       </Routes>
     </>

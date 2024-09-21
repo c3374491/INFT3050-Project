@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
 import cartIcon from "../assets/images/cart-icon.png"
+import onSearch from "../App";
 
 const NavBarUsers = () => {
     return (

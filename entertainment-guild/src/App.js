@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, {useState} from 'react';
 import {Routes, Route} from "react-router-dom";
 import Home from "./pages/Home.js";
 import Login from "./pages/Login";
@@ -16,9 +16,10 @@ import NavBarUsers from "./component/NavBarUsers";
 import NavBarAdmin from "./component/NavBarAdmin";
 
 const App = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   return (
     <>
-      <NavBarUsers />
+      <NavBarUsers/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

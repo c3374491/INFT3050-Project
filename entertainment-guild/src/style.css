@@ -28,3 +28,16 @@ h1 {
     display: flex;
     flex-direction: column;
 }
+
+.containerTextField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchField {
+    width: 20%;
+    
+    
+}

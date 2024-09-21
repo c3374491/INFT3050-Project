@@ -9,14 +9,14 @@
     border-radius: 30px;
     background-color: #92a69d;
 }
-.bookInfo {
+.productInfo {
     display: flex;
     flex-direction: column;
     width: 19%;
     align-items: center;
 }
 .productDescription {
-    width: 75%;
+    width: 70%;
 }
 
 h1 {

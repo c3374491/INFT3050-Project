@@ -25,7 +25,7 @@ const Books = () => {
             />
             </div>
             <ProductList
-                apiUrl='http://localhost:8080/api/v1/db/data/v1/inft3050/Product'
+                apiUrl='http://localhost:8080/api/v1/db/data/v1/inft3050/Product?limit=1000'
                 genre={1}
                 searchTerm={searchTerm}
             />

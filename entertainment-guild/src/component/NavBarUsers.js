@@ -1,12 +1,21 @@
 import React, {useState} from 'react';
-import { NavLink } from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
 import cartIcon from "../assets/images/cart-icon.png"
-import onSearch from "../App";
+import searchIcon from "../assets/images/searchIcon.png"
 
 const NavBarUsers = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
+
+    const handleSearch = (e) => {
+        if (searchTerm.trim()) {
+            navigate(`/productlistsearch?query=${searchTerm}`);
+        }
+    };
+
     return (
-        <AppBar position="sticky">
+        <AppBar position="sticky" sx={{ bgcolor: "#5b7569" }} >
             <Toolbar>
                 <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center' }}>
                     {/* Logo with link */}
@@ -17,13 +26,25 @@ const NavBarUsers = () => {
                     </Typography>
 
                     {/* Search bar */}
-                    <Box sx={{ flexGrow: 1 }}>
+                    <Box sx={{ flexGrow: 1}}>
                         <TextField
                             variant="outlined"
                             size="small"
                             placeholder="Search..."
-                            sx={{ width: '100%', maxWidth: 400 }}
-                        />
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    navigate(`/productlistsearch?query=${searchTerm}`);
+                                }
+                            }}
+                            sx={{ width: '80%', maxWidth: 400 }}/>
+                            <img src={searchIcon} 
+                                 onClick={handleSearch} 
+                                 color="white"  
+                                 alt="search icon"
+                                width={30}/>
+                        
                     </Box>
 
                     {/* Navigation links */}

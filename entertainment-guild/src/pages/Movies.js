@@ -16,7 +16,7 @@ const Movies = () => {
             <div className="containerTextField">
                 <TextField
                     id="standard-basic"
-                    label="Search books..."
+                    label="Search movies..."
                     variant="standard"
                     value={searchTerm}
                     onChange={handleSearch}

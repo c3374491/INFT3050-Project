@@ -41,3 +41,14 @@ h1 {
     
     
 }
+
+.productListSearchContainer
+{
+    display: flex;
+    align-items: center;
+}
+
+.containerProductListSearchComponent
+{
+    display: flex;
+}

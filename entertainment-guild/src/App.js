@@ -13,10 +13,9 @@ import Management from "./pages/Management";
 import ManageUsers from "./pages/ManageUsers";
 import ManageProducts from "./pages/ManageProducts";
 import NavBarUsers from "./component/NavBarUsers";
-import NavBarAdmin from "./component/NavBarAdmin";
+import ProductListSearch from "./pages/ProductListSearch";
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   return (
     <>
       <NavBarUsers/>
@@ -32,6 +31,7 @@ const App = () => {
         <Route path="/manageusers" element={<ManageUsers />} />
         <Route path="/manageproducts" element={<ManageProducts />} />
         <Route path="*" element={<ErrorNotFound />} />
+        <Route path="productlistsearch" element={<ProductListSearch />} />
       </Routes>
     </>
   );

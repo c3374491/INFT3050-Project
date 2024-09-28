@@ -2,6 +2,7 @@ import './App.css';
 import React, {useState} from 'react';
 import {Routes, Route} from "react-router-dom";
 import Home from "./pages/Home.js";
+import Profile from "./pages/Profile"
 import Login from "./pages/Login";
 import Books from "./pages/Books";
 import Games from "./pages/Games";
@@ -14,13 +15,15 @@ import ManageUsers from "./pages/ManageUsers";
 import ManageProducts from "./pages/ManageProducts";
 import NavBarUsers from "./component/NavBarUsers";
 import ProductListSearch from "./pages/ProductListSearch";
+import { CookiesProvider } from 'react-cookie';
 
 const App = () => {
   return (
-    <>
+    <CookiesProvider>
       <NavBarUsers/>
       <Routes>
         <Route path="/" element={<Home />} />
+		<Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/books" element={<Books />} />
         <Route path="/games" element={<Games />} />
@@ -33,7 +36,7 @@ const App = () => {
         <Route path="*" element={<ErrorNotFound />} />
         <Route path="productlistsearch" element={<ProductListSearch />} />
       </Routes>
-    </>
+    </CookiesProvider>
   );
 }
 

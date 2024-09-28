@@ -1,20 +1,20 @@
-// New page - ED 23/09/2024 (Lab Week 9 Provided)
 import { Box, FormControl, FormGroup, TextField, Button, Typography } from '@mui/material';
 import { useState } from "react";
 import HandleLogin from '../helpers/HandleLogin';
 import { Link } from "react-router-dom";
+import HandleCookies from '../helpers/HandleCookies';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
 
+	const navigate = useNavigate();
+
+	const { setAuthToken, authToken, clearAuthToken } = HandleCookies();
+
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [result, setResult] = useState(null); // null indicates no attempt, true for success, false for failure
-	const [userInfo, setUserInfo] = useState(null); // Stores user information
-
-	function handleLogout() {
-		setUserInfo(null);
-	};
 
 	async function handleSubmit(event) {
 		event.preventDefault(); //Prevent reloading of the page
@@ -23,14 +23,12 @@ const Login = () => {
 		console.log("response: ", token);
 		if (loginResponse) {
 			// Authenticated successful
-			//setResult("Authentication successful");
-			//setResult(token.Name);
 			setResult(true);
-			setUserInfo(loginResponse.userInfo);
+			setAuthToken(loginResponse.userInfo, { expires: new Date(Date.now() + 86400e3) })
+			navigate('/profile');
 		}
 		else {
 			// Authentication failed
-			//setResult("Authentication failed");
 			setResult(false);
 		}
 	}
@@ -39,7 +37,6 @@ const Login = () => {
 	const handleUsernameChange = (event) => {
 		setUsername(event.target.value);
 	}
-
 
 	const handlePasswordChange = (event) => {
 		setPassword(event.target.value);
@@ -71,19 +68,9 @@ const Login = () => {
 					<Box >
 						<Button type="submit" variant="outlined">Submit</Button>
 					</Box>
-					{/* <TextField id="result" disabled label="Authentication Result" value={result} /> */}
 				</form>
-				<Link to="/signup">Sign up ?</Link>
-				{/* Display user information if login is successful */}
-                {result && userInfo && (
-                    <Box mt={2}>
-                        <Typography variant="h6">Welcome, {userInfo.name}!</Typography>
-                        <Typography variant="body1">Email: {userInfo.email}</Typography>
-                        <Typography variant="body1">Admin Status: {userInfo.isAdmin ? "Yes" : "No"}</Typography>
-                    	<p onClick={handleLogout}>Click me to Log Out</p>
-					</Box>
-					
-                )}
+				<Link>I forgot my password...</Link>
+				<p>Don't have an account? <Link to="/signup">Sign up!</Link></p>
 			</Box >
 		</Box >
 	);

@@ -3,6 +3,11 @@ import {NavLink, useNavigate} from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
 import cartIcon from "../assets/images/cart-icon.png"
 import searchIcon from "../assets/images/searchIcon.png"
+import HandleCookies from '../helpers/HandleCookies';
+
+
+
+	
 
 const NavBarUsers = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +18,8 @@ const NavBarUsers = () => {
             navigate(`/productlistsearch?query=${searchTerm}`);
         }
     };
+
+	const { authToken } = HandleCookies();
 
     return (
         <AppBar position="sticky" sx={{ bgcolor: "#5b7569" }} >
@@ -70,11 +77,18 @@ const NavBarUsers = () => {
                             <img src={cartIcon}  alt={"Cart Logo"} width={35}/>
                         </NavLink>
                     </Button>
-                    <Button color="inherit">
-                        <NavLink to="/login" style={{ textDecoration: 'none', color: 'white' }}>
-                            Login
-                        </NavLink>
-                    </Button>
+					{authToken ? (
+						<Button color="inherit">
+							<NavLink to="/profile" style={{ textDecoration: 'none', color: 'white' }}>
+								Profile
+							</NavLink>
+						</Button>
+					) : (
+					<Button color="inherit">
+							<NavLink to="/login" style={{ textDecoration: 'none', color: 'white' }}>
+								Login
+							</NavLink>
+						</Button>)}
                 </Box>
             </Toolbar>
         </AppBar>

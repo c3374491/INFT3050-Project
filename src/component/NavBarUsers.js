@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream:src/component/NavBarUsers.js
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
@@ -6,6 +7,17 @@ import cartIcon from "../assets/images/cart-icon.png"
 const NavBarUsers = () => {
     return (
         <AppBar position="static">
+=======
+import React, {useState} from 'react';
+import { NavLink } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
+import cartIcon from "../assets/images/cart-icon.png"
+import onSearch from "../App";
+
+const NavBarUsers = () => {
+    return (
+        <AppBar position="sticky">
+>>>>>>> Stashed changes:entertainment-guild/src/component/NavBarUsers.js
             <Toolbar>
                 <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center' }}>
                     {/* Logo with link */}

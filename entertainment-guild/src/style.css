@@ -1,0 +1,43 @@
+.productStyle {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 30px;
+    margin-left:3%;
+    margin-right: 3%;
+    padding : 10px;
+    border-radius: 30px;
+    background-color: #92a69d;
+}
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    width: 19%;
+    align-items: center;
+}
+.productDescription {
+    width: 70%;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+}
+
+.infoAndCart {
+    display: flex;
+    flex-direction: column;
+}
+
+.containerTextField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchField {
+    width: 20%;
+    
+    
+}

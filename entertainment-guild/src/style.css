@@ -39,5 +39,16 @@ h1 {
 .searchField {
     width: 20%;
     
+    
+}
 
+.productListSearchContainer
+{
+    display: flex;
+    align-items: center;
+}
+
+.containerProductListSearchComponent
+{
+    display: flex;
 }

@@ -1,4 +1,3 @@
-
 // ManageProducts.js 
 // Author: Liam Kimberley || C3375248 
 // Last Updated: 14/9/2024
@@ -21,7 +20,7 @@ const ManageProducts = () => {
   const getProducts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/db/data/v1/inft3050/Product?limit=1000",
+        "http://localhost:8080/api/v1/db/data/v1/inft3050/Product",
         {
           headers: {
             "Content-Type": "application/json",

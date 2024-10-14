@@ -73,6 +73,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
         setOpen(false);
     };
 
+
     // https://mui.com/material-ui/react-snackbar/
     // Function to open the snackbar and set the selected product
     const handleOpenSnackbar = (product) => {
@@ -99,12 +100,14 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
                                 <strong>{product.Name}</strong>
                             </div>
                             <p className="productDescription">
+
                                 {product.Description.length > descriptionLength
                                     ? `${product.Description.substring(0, descriptionLength)}...`
                                     : product.Description}
                             </p>
                             <button onClick={() => handleOpenPopup(product)}>i</button>
                             <button onClick={ () => handleOpenSnackbar(product)}>cart</button>
+
                         </li>
                     ))}
                 </ul>
@@ -121,6 +124,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
                     onClose={handleClosePopup}
                 />
             )}
+
             {/* Display a snackbar if a user add a product to cart
             Automaticallyb hidding after 3000ms, pop in the top right of the screen */}
             <Snackbar
@@ -130,6 +134,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
                 message={cartProduct ? `You added ${cartProduct.Name} to the cart` : ''}
                 onClose={handleCloseSnackbar}
             />
+
         </div>
     );
 };

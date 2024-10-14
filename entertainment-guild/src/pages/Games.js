@@ -16,7 +16,9 @@ const Games = () => {
             <div className="containerTextField">
                 <TextField
                     id="standard-basic"
+
                     label="Search games..."
+
                     variant="standard"
                     value={searchTerm}
                     onChange={handleSearch}

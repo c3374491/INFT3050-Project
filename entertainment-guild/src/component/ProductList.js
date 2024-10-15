@@ -9,7 +9,7 @@ import Snackbar from '@mui/material/Snackbar';
 // apiUrl: string containing the URL to fetch the products data
 // genre: string containing the genre to filter the products, 1 -> books, 2-> movies or 3 -> games
 // title: string containing the title to display above the list of products depends on the genre
-const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
+const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength, orientation = "horizontal"}) => {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState(null);
     const [isOpen, setOpen] = useState(false);
@@ -94,8 +94,9 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
             {filteredProducts.length > 0 ? (
                 <ul>
                     {filteredProducts.map((product, index) => (
-                        <li key={index} className="productStyle">
-                            <div className="productInfo">
+                        <li key={index}
+                            className={orientation === "horizontal" ? "productStyleHorizontal" : "productStyleVertical"}>
+                            <div className={orientation === "horizontal" ? "productInfoHorizontal" : "productInfoVertical"}>
                                 <strong>{product.Name}</strong>
                             </div>
                             <p className="productDescription">
@@ -104,7 +105,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
                                     : product.Description}
                             </p>
                             <button onClick={() => handleOpenPopup(product)}>i</button>
-                            <button onClick={ () => handleOpenSnackbar(product)}>cart</button>
+                            <button onClick={() => handleOpenSnackbar(product)}>cart</button>
                         </li>
                     ))}
                 </ul>

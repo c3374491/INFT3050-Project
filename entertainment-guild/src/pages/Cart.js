@@ -35,13 +35,9 @@ const Cart = () => {
                 params: { ids: ids.join(',') }
             });
 
-            // Affichez les données pour voir ce que vous obtenez
-            console.log("Response data:", response.data);
-
             if (Array.isArray(response.data.list)) {
-                console.log("Fetched Products:", response.data.list);
 
-                // Filtrer les produits par ID
+                // Filter the products
                 const filteredProducts = response.data.list.filter(product =>
                     ids.includes(product.ID)
                 );

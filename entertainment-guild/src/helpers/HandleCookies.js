@@ -14,44 +14,39 @@ const HandleCookies = () => {
     removeCookieAuthToken('authToken', { path: '/' });
   };
 
+  // https://www.youtube.com/watch?v=HpiTv0VBpFU
   const createCookie = (name, value, days) => {
     let expires = "";
     if (days) {
       const date = new Date();
       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = "; expires=" + date.toUTCString(); // Utiliser toUTCString pour la compatibilité
+      expires = "; expires=" + date.toUTCString();
     }
     document.cookie = `${name}=${value}${expires}; path=/`;
   }
 
   // Function to set or update the cart cookie
   const setCartCookie = (product) => {
-    console.log("Product ID:", product.ID); // Affichez l'ID du produit
 
-    // Récupérer les données du cookie existant
+    // Get the existing cookie
     let cart = getCartCookie("cart");
     let cartIDs = [];
 
-    // Vérifiez si le panier existe déjà et tentez de le parser
+    // Check if the cart already exist
     if (cart) {
       try {
-        cartIDs = JSON.parse(cart); // Parser l'ID du cookie en tableau
+        cartIDs = JSON.parse(cart); // Parse the id of the cookie into an array
       } catch (error) {
         console.error('Error parsing cart JSON:', error);
-        cartIDs = []; // Réinitialiser le panier en cas d'erreur
+        cartIDs = [];
       }
     }
 
-    // Ajouter l'ID du produit au tableau s'il n'est pas déjà présent
-    if (!cartIDs.includes(product.ID)) {
-      cartIDs.push(product.ID);
-    }
+    cartIDs.push(product.ID);
 
-    // Sérialiser et créer le cookie de panier mis à jour avec uniquement les IDs
+    // Create the cookie with all the id of the product
     const cookieString = JSON.stringify(cartIDs);
-    console.log("Updated cart IDs string:", cookieString); // Log de la chaîne JSON
     createCookie("cart", cookieString, 31);
-    console.log("Cart cookie set:", document.cookie);
   };
 
 

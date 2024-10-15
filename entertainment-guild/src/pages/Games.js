@@ -27,6 +27,7 @@ const Games = () => {
                 apiUrl='http://localhost:8080/api/v1/db/data/v1/inft3050/Product?limit=1000'
                 genre={3}
                 searchTerm={searchTerm}
+                descriptionLength={400}
             />
         </div>
     );

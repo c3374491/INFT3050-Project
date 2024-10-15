@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import ProductDetailsPopup from "./ProductDetailPopup";
 import "../style.css";
 // https://mui.com/material-ui/react-snackbar/
 import Snackbar from '@mui/material/Snackbar';
+import "../helpers/HandleCookies"
+import HandleCookies from "../helpers/HandleCookies";
 
 // ProductList component to display a list of products and a popup dialog with more details
 // apiUrl: string containing the URL to fetch the products data
@@ -16,6 +18,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isSnackBarOpen, setSnackBarOpen] = useState(false);
     const [cartProduct, setCartProduct] = useState(null);
+    const { cart, setCartCookie, getCartCookie } = HandleCookies();
 
     // Fetch products data from the API
     useEffect(() => {
@@ -86,6 +89,15 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
         setSnackBarOpen(false);
     }
 
+    const addToCart = (product) => {
+        console.log(product)
+        setCartCookie(product);
+        const updatedCart = getCartCookie();
+        console.log("Cart updated with IDs:", updatedCart);
+        handleOpenSnackbar(product);
+    };
+
+
     // Display the list of products
     // If the description is longer than 400 characters, display only the first 400 characters
     // Display a button to open the popup with more details
@@ -104,7 +116,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
                                     : product.Description}
                             </p>
                             <button onClick={() => handleOpenPopup(product)}>i</button>
-                            <button onClick={ () => handleOpenSnackbar(product)}>cart</button>
+                            <button onClick={() => addToCart(product)}>cart</button>
                         </li>
                     ))}
                 </ul>

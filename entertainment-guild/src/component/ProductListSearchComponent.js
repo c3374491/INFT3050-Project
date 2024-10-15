@@ -46,6 +46,7 @@ const ProductListSearchComponent = ({ apiUrl, genre, searchTerm, descriptionLeng
                 genre={genre}
                 searchTerm={searchTerm}
                 descriptionLength={descriptionLength}
+                orientation={"vertical"}
             />}
         </div>
     );

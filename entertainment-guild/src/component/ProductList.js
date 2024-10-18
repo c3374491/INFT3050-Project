@@ -6,6 +6,8 @@ import "../style.css";
 import Snackbar from '@mui/material/Snackbar';
 import "../helpers/HandleCookies"
 import HandleCookies from "../helpers/HandleCookies";
+import informationIcon from "../assets/images/information-icon.png";
+import addToCartIcon from "../assets/images/add-to-cart-icon.svg";
 
 // ProductList component to display a list of products and a popup dialog with more details
 // apiUrl: string containing the URL to fetch the products data
@@ -18,7 +20,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isSnackBarOpen, setSnackBarOpen] = useState(false);
     const [cartProduct, setCartProduct] = useState(null);
-    const { cart, setCartCookie, getCartCookie } = HandleCookies();
+    const { setCartCookie, getCartCookie } = HandleCookies();
 
     // Fetch products data from the API
     useEffect(() => {
@@ -115,8 +117,12 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength}) => {
                                     ? `${product.Description.substring(0, descriptionLength)}...`
                                     : product.Description}
                             </p>
-                            <button onClick={() => handleOpenPopup(product)}>i</button>
-                            <button onClick={() => addToCart(product)}>cart</button>
+                            <button onClick={() => handleOpenPopup(product)} className="productCart">
+                                <img src={informationIcon} alt="Info Button Icon" className="productCartImage"/>
+                            </button>
+                            <button onClick={() => addToCart(product)} className="productCart">
+                                <img src={addToCartIcon} alt="Add to car Button Icon" className="productCartImage"/>
+                            </button>
                         </li>
                     ))}
                 </ul>

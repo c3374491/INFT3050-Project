@@ -34,8 +34,8 @@ const CartProductList = ({ productList }) => {
         <Box>
             {productList.length > 0 ? (
                 productList.map((product,index) => (
-                    <li key={index} className="productStyle">
-                        <div className="productInfo">
+                    <li key={index} className="productStyleHorizontal">
+                        <div className="productInfoHorizontal">
                             <strong>{product.Name}</strong>
                         </div>
                         <p className="productDescription">

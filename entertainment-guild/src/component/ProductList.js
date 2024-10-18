@@ -118,13 +118,14 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength, orientation
                                     ? `${product.Description.substring(0, descriptionLength)}...`
                                     : product.Description}
                             </p>
-                            <button onClick={() => handleOpenPopup(product)} className="productCart">
-                                <img src={informationIcon} alt="Info Button Icon" className="productCartImage"/>
-                            </button>
-                            <button onClick={() => addToCart(product)} className="productCart">
-                                <img src={addToCartIcon} alt="Add to car Button Icon" className="productCartImage"/>
-                            </button>
-
+                            <div className={orientation === "vertical" ? "productAction" : null}>
+                                <button onClick={() => handleOpenPopup(product)} className="productCart">
+                                    <img src={informationIcon} alt="Info Button Icon" className="productCartImage"/>
+                                </button>
+                                <button onClick={() => addToCart(product)} className="productCart">
+                                    <img src={addToCartIcon} alt="Add to car Button Icon" className="productCartImage"/>
+                                </button>
+                            </div>
                         </li>
                     ))}
                 </ul>

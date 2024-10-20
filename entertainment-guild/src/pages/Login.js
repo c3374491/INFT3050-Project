@@ -29,6 +29,7 @@ const Login = () => {
 		}
 		else {
 			// Authentication failed
+			alert("incorrect login"); // will add more and make better
 			setResult(false);
 		}
 	}
@@ -71,6 +72,7 @@ const Login = () => {
 				</form>
 				<Link>I forgot my password...</Link>
 				<p>Don't have an account? <Link to="/signup">Sign up!</Link></p>
+				{/* add something here for failed login */}
 			</Box >
 		</Box >
 	);

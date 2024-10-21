@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import HandleCookies from "../helpers/HandleCookies";
 import CartProductList from "../component/CartProductList";
 import axios from "axios";
+import {NavLink} from "react-router-dom";
 
 const Cart = () => {
     const { authToken, getCartCookie } = HandleCookies();
@@ -61,6 +62,18 @@ const Cart = () => {
                     <h1>Your Cart</h1>
                     {/* Show products in the cart */}
                     <CartProductList productList={products} />
+                    {authToken &&
+                        <button disabled={false}>Checkout</button>
+                    }
+                    {!authToken &&
+                        <div className={checkoutDiv}>
+                            <button disabled={true}>Checkout</button>
+                            <h2>You have to be connected to checkout</h2>
+                            <NavLink to="/login" style={{textDecoration: 'none'}}>
+                                Login
+                            </NavLink>
+                        </div>
+                    }
                 </Box>
             </Box>
         </div>

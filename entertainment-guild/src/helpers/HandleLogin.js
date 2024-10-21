@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Helper function for hashing the password using SHA-256
 // This function takes a message (string) as input and returns a hexadecimal string representation of the hashed value.
-async function sha256(message) {
+export async function sha256(message) {
 	const msgBuffer = new TextEncoder().encode(message);
 	const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
 	return Array.from(new Uint8Array(hashBuffer))
@@ -62,6 +62,8 @@ const processLogin = async (username, password, token) => {
 				userInfo: {
 					name: user.Name,
 					email: user.Email,
+					salt: user.Salt, // Include salt for future operations
+					hashPW: user.HashPW // Include hashPW for future operations
 				},
 			};
 		}

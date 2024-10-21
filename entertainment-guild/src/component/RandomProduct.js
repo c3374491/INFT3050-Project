@@ -5,6 +5,7 @@ import informationIcon from "../assets/images/information-icon.png";
 import {Box, Typography} from "@mui/material";
 import ProductDetailsPopup from "./ProductDetailPopup";
 import HandleCookies from '../helpers/HandleCookies';
+import Snackbar from "@mui/material/Snackbar";
 
 const RandomProduct = ({ genre }) => {
 
@@ -13,7 +14,7 @@ const RandomProduct = ({ genre }) => {
     const [product, setProduct] = useState([]);
     const {setCartCookie, getCartCookie} = HandleCookies();
 
-    const [snackBarOpen, setSnackBarOpen] = useState(false);
+    const [isSnackBarOpen, setSnackBarOpen] = useState(false);
     const [cartProduct, setCartProduct] = useState(null);
     
     // Get handleOpenPopup and handleClosePopup functions from https://mui.com/material-ui/react-dialog/
@@ -121,6 +122,15 @@ const RandomProduct = ({ genre }) => {
                     onClose={handleClosePopup}
                 />
             )}
+            {/* Display a snackbar if a user add a product to cart
+            Automaticallyb hidding after 3000ms, pop in the top right of the screen */}
+            <Snackbar
+                open={isSnackBarOpen}
+                autoHideDuration={3000}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}  // Set position to top-right
+                message={cartProduct ? `You added ${cartProduct.Name} to the cart` : ''}
+                onClose={handleCloseSnackbar}
+            />
         </Box>
 
     );

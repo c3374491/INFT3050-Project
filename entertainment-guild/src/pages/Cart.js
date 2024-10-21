@@ -6,8 +6,8 @@ import axios from "axios";
 
 const Cart = () => {
     const { authToken, getCartCookie } = HandleCookies();
-    const [currentCart, setCurrentCart] = useState([]);
     const [products, setProducts] = useState([]);
+    const [showAddToCart, setShowAddToCart] = useState(false)
 
     useEffect(() => {
         const cart = getCartCookie("cart");

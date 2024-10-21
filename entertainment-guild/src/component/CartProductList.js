@@ -60,6 +60,7 @@ const CartProductList = ({ productList }) => {
                     open={isOpen}
                     product={selectedProduct}
                     onClose={handleClosePopup}
+                    showAddToCart={false}
                 />
             )}
         </Box>

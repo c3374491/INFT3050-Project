@@ -4,7 +4,7 @@ import axios from 'axios';
 
 
 
-axios.get('{{baseUrl}}/api/v1/db/data/v1/inft3050/Product?limit=1000')
+/*axios.get('{{baseUrl}}/api/v1/db/data/v1/inft3050/Product?limit=1000')
 	.then(response => {
 		const filteredData = response.data.list.filter(item =>
 			item['Stocktake List'].some(stockItem => stockItem.ItemId === 50)
@@ -12,7 +12,7 @@ axios.get('{{baseUrl}}/api/v1/db/data/v1/inft3050/Product?limit=1000')
 		console.log(filteredData); // This will log the items with ItemId = 50
 	})
 	.catch(error => console.error('Error fetching data:', error));
-
+*/
 
 
 
@@ -75,6 +75,20 @@ const fetchOrdersData = async (url, token) => {
 	}
 };
 
+
+// Function to fetch user data from the API based on a provided URL and token
+// Returns the data if the request is successful, or null if an error occurs (e.g., user not found or invalid request).
+const fetchStocktakeData = async (url, token) => {
+	try {
+		const response = await axios.get(url, { headers: { 'xc-token': token } });
+		return response.data;
+	} catch (error) {
+		// Log the error but don't throw it, allowing the function to continue for other login attempts.
+		console.warn(`Failed to fetch data from ${url}:`, error.message);
+		return null; // Return null to indicate no data was found
+	}
+};
+
 // Function to handle the login logic for both admin/employee and user
 // Tries to log in as an admin/employee first, then as a regular user if the first attempt fails.
 const processLogin = async (username, password, token) => {
@@ -119,6 +133,18 @@ const processLogin = async (username, password, token) => {
 			const ordersUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Orders/3`
 			const ordersData = await fetchOrdersData(ordersUrl, token);
 
+			
+			const stocktakeID = ordersData['Stocktake List'][0].ItemId;
+
+			const stocktakeUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Stocktake/${stocktakeID}`
+			const stocktakeData = await fetchStocktakeData(stocktakeUrl, token);
+
+			const stocktakeProductID = stocktakeData.ProductId;
+			const productsUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Product/${stocktakeProductID}?limit=1000`
+			const productData = await fetchStocktakeData(productsUrl, token);
+
+
+
 			// Return a token and user info if login is successful
 			return {
 				token,
@@ -142,6 +168,8 @@ const processLogin = async (username, password, token) => {
 					orderSuburb: ordersData.Suburb,
 					orderState: ordersData.State,
 					orderList: ordersData['Stocktake List'],
+					productID: stocktakeData.ProductId,
+					productDataItem: productData,
 				},
 			};
 		}

@@ -2,7 +2,6 @@ import React from 'react';
 import { Typography, Box, Button, Card } from '@mui/material';
 import HandleCookies from '../helpers/HandleCookies';
 import { useNavigate } from 'react-router-dom';
-import ProductList from '../component/ProductList';
 
 const Profile = () => {
 
@@ -64,13 +63,13 @@ const Profile = () => {
 							</Card>)}
 
 						<ul>{arrayDataItems}</ul>
+						<p>{authToken.productID}</p>
 
-						// trying to display products from previous orders
-						<ProductList
-							apiUrl='http://localhost:8080/api/v1/db/data/v1/inft3050/Product/50'
-							genre={1}
-							searchTerm={""}
-						/>
+						<p>{authToken.productDataItem.Name}</p>
+						<p>{authToken.productDataItem.Author}</p>
+						<p>{authToken.productDataItem.Description}</p>
+						<p>{authToken.productDataItem.Genre1.Name}</p>
+
 
 						<Typography variant="body1">Admin Status: {authToken.isAdmin ? "Yes" : "No"}</Typography>
 					</Box>

@@ -45,6 +45,10 @@ h1 {
     text-align: center;
 }
 
+h2 {
+    text-align: center;
+}
+
 .infoAndCart {
     display: flex;
     flex-direction: column;
@@ -96,30 +100,6 @@ h1 {
     flex-direction: row;
 }
 
-.userManagementStyle {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #4dabf5;
-    margin-top: 30px;
-    border-radius : 30px;
-    
-}
-
-.editButton {
-   background-color: #4dabf5;
-    border: none;
-}
-
-.editButton:hover {
-    cursor: pointer;
-}
-
-.editImage {
-    width: 30px;
-    height: 30px;
-}
-
 .centerButton {
     display: flex;
     justify-content: center;
@@ -135,4 +115,88 @@ h1 {
     padding: 15px;
     border-radius: 20px;
     justify-content: center;
+}
+
+.textFieldManageContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.addUserContainer {
+    display: flex;
+    justify-content: space-around;
+    width: 60%;
+    margin-left: 25%;
+    align-items: center;
+    align-content: center;
+    
+}
+
+.buttonSubmit {
+    background-color: #4dabf5;
+    border:none;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 15px;
+    
+}
+
+.buttonSubmitContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.userTableWrap {
+    max-height : 50vh;
+    overflow-y: auto;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+
+.userTable th, .userTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.userTable th {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0; 
+    z-index: 1;
+}
+
+.userTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.userTable th, .userTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.userTable th {
+    background-color: #f2f2f2;
+}
+
+.evenRow {
+    background-color: #f9f9f9;
+}
+
+.oddRow {
+    background-color: #e9e9e9;
+}
+
+.editButton, .deleteButton {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.editImage, .deleteImage {
+    width: 20px;
+    height: 20px;
 }

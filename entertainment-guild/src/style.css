@@ -95,3 +95,27 @@ h1 {
     display: flex;
     flex-direction: row;
 }
+
+.userManagementStyle {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #4dabf5;
+    margin-top: 30px;
+    border-radius : 30px;
+    
+}
+
+.editButton {
+   background-color: #4dabf5;
+    border: none;
+}
+
+.editButton:hover {
+    cursor: pointer;
+}
+
+.editImage {
+    width: 30px;
+    height: 30px;
+}

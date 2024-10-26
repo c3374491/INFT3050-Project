@@ -13,6 +13,7 @@ import SignUp from "./pages/SignUp";
 import Management from "./pages/Management";
 import ManageUsers from "./pages/ManageUsers";
 import ManageProducts from "./pages/ManageProducts";
+import ManageAccount from './pages/ManageAccount.js';
 import NavBarUsers from "./component/NavBarUsers";
 import NavBarAdmin from "./component/NavBarAdmin"
 import ProductListSearch from "./pages/ProductListSearch";
@@ -38,6 +39,7 @@ const App = () => {
 				<Route path="/signup" element={<SignUp />} />
 				<Route path="/management" element={<Management />} />
 				<Route path="/manageusers" element={<ManageUsers />} />
+				<Route path="/manageaccount"element={<ManageAccount />} />
 				<Route path="/manageproducts" element={<ManageProducts />} />
 				<Route path="*" element={<ErrorNotFound />} />
 				<Route path="productlistsearch" element={<ProductListSearch />} />

@@ -60,6 +60,7 @@ const processLogin = async (username, password, token) => {
 			return {
 				token,
 				userInfo: {
+					id: user.Id,
 					name: user.Name,
 					email: user.Email,
 					salt: user.Salt, // Include salt for future operations

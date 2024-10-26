@@ -1,8 +1,8 @@
 // ManageAccount.js
 // Author: Liam Kimberley || C3375248
-// Last Updated: 21/10/2024
+// Last Updated: 26/10/2024
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Box, TextField, Button } from '@mui/material';
 import axios from 'axios';
 import HandleCookies from '../helpers/HandleCookies';
@@ -19,6 +19,13 @@ const ManageAccount = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
 
+    // Check if authToken and user ID are available
+    useEffect(() => {
+        if (!authToken || !authToken.id) { 
+            setError('User ID not found. Please log in again.');
+        }
+    }, [authToken]);
+
     const handleInputChange = (e) => {
         setFormData({
             ...formData,
@@ -29,7 +36,13 @@ const ManageAccount = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Basic validation
+        // Check for authToken and user ID before proceeding
+        if (!authToken || !authToken.id) { // Check for userID
+            setError('Unable to update account. Missing user ID.');
+            return;
+        }
+
+        // Basic validation for passwords
         if (formData.newPassword !== formData.confirmPassword) {
             setError('New passwords do not match');
             return;
@@ -38,11 +51,8 @@ const ManageAccount = () => {
         try {
             // Hash the current password for verification
             const hashedCurrentPassword = await sha256(authToken.salt + formData.currentPassword);
-            console.log('Stored salt:', authToken.salt);
-            console.log('Hashed Current Password:', hashedCurrentPassword); // Log hashed current password
-            console.log('Stored Hashed Password:', authToken.hashPW); // Log stored hashed password for comparison
 
-            // Check if the current password matches the one in the auth token (hashed)
+            // Check if the current password matches the one in the authToken (hashed)
             if (hashedCurrentPassword !== authToken.hashPW) {
                 setError('Current password is incorrect');
                 return;
@@ -53,14 +63,15 @@ const ManageAccount = () => {
 
             // Prepare the updated user data
             const updatedUser = {
-                Name: formData.name,
+                UserID: authToken.id,
+                Name: formData.name || undefined, // Only include if a name is provided
                 HashPW: newHashedPassword,
-                salt: authToken.salt // Ensure to keep the salt
+                Salt: authToken.salt // Keep the salt
             };
 
-            // Send PUT request to update user information
-            const response = await axios.put(
-                `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.id}`,
+            // Use a PATCH request to the correct URL using the patron's UserID as the identifier
+            const response = await axios.patch(
+                `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.id}`, // Use UserID in the URL path
                 updatedUser,
                 {
                     headers: {
@@ -70,22 +81,19 @@ const ManageAccount = () => {
                 }
             );
 
-            console.log('API Response:', response.data); // Log the API response
-
-            // Setting the updated token with valid structure
+            // Update the token with the new hashed password and name
             const updatedToken = { 
                 ...authToken, 
-                name: formData.name, 
+                name: formData.name || authToken.name, // Use previous name if no new name is provided
                 hashPW: newHashedPassword // Ensure you're passing the new hashed password correctly
             };
 
-            // Setting the updated token
-            setAuthToken(updatedToken); // This will store the updated token in cookies
+            // Set the updated token in cookies
+            setAuthToken(updatedToken);
 
             setSuccessMessage('Account updated successfully!');
             setError(null); // Clear any previous errors
         } catch (error) {
-            console.error('Update failed:', error);
             setError(error.response?.data?.msg || 'Failed to update account. Please try again.');
         }
     };

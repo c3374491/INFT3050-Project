@@ -10,11 +10,11 @@ import {
     FormControlLabel
 } from '@mui/material';
 
-// UserEditPopup component to display in a pop up some informations about a product
+// UserEditPopup component to edit a user in a popup
 // open: boolean to show or hide the popup dialog, defined in the parent component
 // user: object containing the user details to edit
 // onClose: function to close the popup dialog, defined in the parent component
-const UserEditPopup = ({ open, user, onClose,showAddToCart=true }) => {
+const UserEditPopup = ({ open, user, onClose }) => {
     const [name, setName] = useState(user.Name);
     const [username, setUsername] = useState(user.UserName);
     const [email, setEmail] = useState(user.Email);
@@ -41,14 +41,14 @@ const UserEditPopup = ({ open, user, onClose,showAddToCart=true }) => {
 
             if (!response.ok) {
                 const errorData = await response.json(); 
-                throw new Error(`Erreor when update the user: ${errorData.message || response.statusText}`);
+                throw new Error(`Error when update the user: ${errorData.message || response.statusText}`);
             }
 
             const data = await response.json();
-            console.log('Utilisateur mis à jour:', data);
+            console.log('User updated:', data);
 
         } catch (error) {
-            console.error('Erreur:', error);
+            console.error('Error:', error);
         }
         
         onClose();
@@ -64,22 +64,22 @@ const UserEditPopup = ({ open, user, onClose,showAddToCart=true }) => {
             <DialogContent className="textFieldManageContainer">
                 <TextField
                     margin="dense"
-                    label="Name"
-                    type="text"
-                    name="Name"
-                    defaultValue={user.Name}
-                    required
-                    onChange={(e) => setName(e.target.value)}
-                />
-
-                <TextField
-                    margin="dense"
                     label="Username"
                     type="text"
                     name="Username"
                     defaultValue={user.UserName}
                     required
                     onChange={(e) => setUsername(e.target.value)}
+                />
+
+                <TextField
+                    margin="dense"
+                    label="Name"
+                    type="text"
+                    name="Name"
+                    defaultValue={user.Name}
+                    required
+                    onChange={(e) => setName(e.target.value)}
                 />
 
                 <TextField

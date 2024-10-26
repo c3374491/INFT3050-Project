@@ -15,8 +15,6 @@ const AddUserForm = () => {
   const [error, setError] = useState(""); // State to store any fetch error
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null); // Error state for existing password
-  const [salt, setSalt] = useState("");
-  const [hashPW, setHashPW] = useState("");
 
   // Fetch users from the API
   useEffect(() => {

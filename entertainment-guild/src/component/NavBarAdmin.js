@@ -21,12 +21,12 @@ const NavBarAdmin = () => {
 					{/* Navigation links */}
 					<Box sx={{ display: 'flex', gap: 4, flexGrow: 1 }}>
 						<Button color="inherit">
-							<NavLink to="/manageusers" style={{ textDecoration: 'none', color: 'white' }}>
+							<NavLink to="/admin/manageusers" style={{ textDecoration: 'none', color: 'white' }}>
 								Manage Users
 							</NavLink>
 						</Button>
 						<Button color="inherit">
-							<NavLink to="/manageproducts" style={{ textDecoration: 'none', color: 'white' }}>
+							<NavLink to="/admin/manageproducts" style={{ textDecoration: 'none', color: 'white' }}>
 								Manage Products
 							</NavLink>
 						</Button>

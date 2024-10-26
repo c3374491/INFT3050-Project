@@ -65,7 +65,6 @@ const processLogin = async (username, password, token) => {
 					email: user.Email,
 					salt: user.Salt, // Include salt for future operations
 					hashPW: user.HashPW, // Include hashPW for future operations
-					isAdmin: false
 				},
 			};
 		}

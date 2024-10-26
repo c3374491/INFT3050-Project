@@ -141,6 +141,15 @@ h2 {
     
 }
 
+.deleteButtonSubmit {
+    background-color: #ea0626;
+    border:none;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 15px;
+
+}
+
 .buttonSubmitContainer {
     display: flex;
     justify-content: center;

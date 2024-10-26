@@ -1,6 +1,6 @@
 // SignUp.js
 // Author: Liam Kimberley || C3375248
-// Last Updated: 19/10/2024
+// Last Updated: 26/10/2024
 
 import React, { useState } from 'react';
 import { Typography, Box, TextField, Button } from '@mui/material';
@@ -41,6 +41,20 @@ const SignUp = () => {
 		}
 
 		try {
+			// Check if email already exists
+			const emailCheckResponse = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons?Email=${formData.email}`, {
+				headers: {
+					'Content-Type': 'application/json',
+					'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ', // Auth token for API
+				}
+			});
+			console.log(emailCheckResponse);
+
+			if (emailCheckResponse.data.length > 0) {
+				setError('An account with this email already exists.');
+				return;
+			}
+
 			// Generate Salt and Hash the password
 			const salt = generateShorterSalt(16); // Generating a shorter 16-character salt
 			const hashPW = await sha256(salt + formData.password);
@@ -55,8 +69,6 @@ const SignUp = () => {
 				HashPW: hashPW // This should be the correct hashed password
 			};
 
-			console.log('New Patron:', newPatron); // Log payload before sending
-
 			// Send POST request to the API for creating the account
 			const response = await axios.post('http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons', newPatron, {
 				headers: {
@@ -65,15 +77,13 @@ const SignUp = () => {
 				}
 			});
 
-			console.log('API Response:', response.data); // Log API response
-
 			// If successful, set auth token and success message
 			setAuthToken(response.data.token); // Assuming the API sends back a token
 			setSuccessMessage('Account created successfully! You can now log in.');
 			setError(null); // Clear any previous errors
 			setFormData({ email: '', name: '', password: '', confirmPassword: '' }); // Reset form
 		} catch (error) {
-			console.error('Sign up failed');
+			console.error('Sign up failed', error);
 			setError(error.response?.data?.msg || 'Failed to create account. Please try again.');
 		}
 	};
@@ -133,4 +143,4 @@ const SignUp = () => {
 	);
 };
 
-export default SignUp; 
+export default SignUp;

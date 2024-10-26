@@ -7,6 +7,7 @@ import { Typography, Box, TextField, Button } from '@mui/material';
 import axios from 'axios';
 import HandleCookies from '../helpers/HandleCookies';
 import { sha256 } from '../helpers/HandleLogin'; // Named import for sha256
+import PatronDeletePopup from '../component/PatronDeletePopup'; // Import your delete popup component
 
 const ManageAccount = () => {
     const { authToken, setAuthToken } = HandleCookies();
@@ -18,6 +19,7 @@ const ManageAccount = () => {
     });
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
+    const [openDeletePopup, setOpenDeletePopup] = useState(false); // State to control the popup
 
     // Check if authToken and user ID are available
     useEffect(() => {
@@ -63,7 +65,7 @@ const ManageAccount = () => {
 
             // Prepare the updated user data
             const updatedUser = {
-                UserID: authToken.id,
+                Email: authToken.email,
                 Name: formData.name || undefined, // Only include if a name is provided
                 HashPW: newHashedPassword,
                 Salt: authToken.salt // Keep the salt
@@ -98,6 +100,14 @@ const ManageAccount = () => {
         }
     };
 
+    const handleDeleteAccount = () => {
+        setOpenDeletePopup(true); // Open the delete confirmation popup
+    };
+
+    const handleClosePopup = () => {
+        setOpenDeletePopup(false); // Close the delete confirmation popup
+    };
+
     return (
         <div>
             <h1>Manage Account</h1>
@@ -107,6 +117,7 @@ const ManageAccount = () => {
                     <TextField
                         label="Name"
                         name="name"
+                        defaultValue={authToken.Name}
                         value={formData.name}
                         onChange={handleInputChange}
                         fullWidth
@@ -142,13 +153,19 @@ const ManageAccount = () => {
                         fullWidth
                         margin="normal"
                     />
-                    <Button type="submit" variant="contained" color="primary">
+                    <Button type="submit" variant="contained" fullWidth color="primary">
                         Update Account
                     </Button>
+                    <Box mt={2}>
+                        <Button variant="contained" fullWidth color="error" onClick={handleDeleteAccount}>
+                            Delete Account
+                        </Button>
+                    </Box>
                 </form>
                 {error && <Typography color="error">{error}</Typography>}
                 {successMessage && <Typography color="primary">{successMessage}</Typography>}
             </Box>
+            <PatronDeletePopup open={openDeletePopup} onClose={handleClosePopup} /> {/* Render the popup */}
         </div>
     );
 };

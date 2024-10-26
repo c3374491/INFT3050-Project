@@ -3,11 +3,13 @@ import { Box } from "@mui/material";
 import HandleCookies from "../helpers/HandleCookies";
 import CartProductList from "../component/CartProductList";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const { authToken, getCartCookie } = HandleCookies();
     const [products, setProducts] = useState([]);
     const [showAddToCart, setShowAddToCart] = useState(false)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const cart = getCartCookie("cart");
@@ -53,6 +55,17 @@ const Cart = () => {
         }
     };
 
+    const handleCheckout = () => {
+        if (authToken) {
+            navigate('/checkout');
+        }
+        else {
+            // Redirect to the login page
+            navigate('/login');
+        }
+        
+    };
+
 
     return (
         <div>
@@ -60,7 +73,10 @@ const Cart = () => {
                 <Box>
                     <h1>Your Cart</h1>
                     {/* Show products in the cart */}
-                    <CartProductList productList={products} />
+                    <CartProductList productList={products}/>
+                    <Box className="centerButton">
+                        <button onClick={handleCheckout} className="buttonCheckout">Checkout</button>
+                    </Box>
                 </Box>
             </Box>
         </div>

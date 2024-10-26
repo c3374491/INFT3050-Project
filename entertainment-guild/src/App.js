@@ -19,6 +19,7 @@ import NavBarAdmin from "./component/NavBarAdmin"
 import ProductListSearch from "./pages/ProductListSearch";
 import { CookiesProvider } from 'react-cookie';
 import HandleCookies from './helpers/HandleCookies';
+import Checkout from "./pages/Checkout";
 
 
 const App = () => {
@@ -43,6 +44,7 @@ const App = () => {
 				<Route path="/manageproducts" element={<ManageProducts />} />
 				<Route path="*" element={<ErrorNotFound />} />
 				<Route path="productlistsearch" element={<ProductListSearch />} />
+				<Route path="/checkout" element={<Checkout/> }/>
 			</Routes>
 		</CookiesProvider>
 	);

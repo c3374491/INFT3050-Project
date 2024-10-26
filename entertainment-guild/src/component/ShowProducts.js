@@ -10,6 +10,7 @@ import movieIcon from "../assets/images/movie_icon.png";
 import gameIcon from "../assets/images/game_icon.png";
 import {format} from "date-fns";
 import ProductEditPopup from "./ProductEditPopup";
+import ProductDeletePopup from "./ProductDeletePopup";
 
 // ShowProduct component to display a list of the products
 // apiUrl: string containing the URL to fetch the products data
@@ -123,7 +124,7 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
                                     ) : product.Genre === 3 ? (
                                         <img src={gameIcon} alt="Genre 3" width="30px"/>
                                     ) : (
-                                        <img src="path/to/defaultImage.png" alt="Default Genre" />
+                                        <img src="no.png" alt="Default Genre" />
                                     )}
                                 </td>
                                 <td>
@@ -165,9 +166,9 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
             )}
 
             {selectedProductDelete && (
-                <UserDeletePopup
+                <ProductDeletePopup
                     open={isOpenDelete}
-                    user={selectedProductDelete}
+                    product={selectedProductDelete}
                     onClose={handleClosePopupDelete}
                 />
             )}

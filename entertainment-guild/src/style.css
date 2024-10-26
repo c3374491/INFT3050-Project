@@ -122,14 +122,14 @@ h2 {
     flex-direction: column;
 }
 
-.addUserContainer .addProductContainer {
+.addUserContainer, .addProductContainer {
     display: flex;
     justify-content: space-around;
-    width: 60%;
-    margin-left: 25%;
-    align-items: center;
-    align-content: center;
-    
+}
+
+.addProductFormDescription {
+    width: 90%;
+    left: 50px;
 }
 
 .buttonSubmit {
@@ -144,7 +144,7 @@ h2 {
 .buttonSubmitContainer {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .userTableWrap {
@@ -207,4 +207,8 @@ h2 {
     width: 100%;
     border: 1px solid #8c8989;
     font-size: 1rem;
+}
+
+.addProductSelectForm {
+    width: 10%;
 }

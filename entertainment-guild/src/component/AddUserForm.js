@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { TextField } from "@mui/material";
 import {sha256} from "../helpers/HandleLogin";
+import "../style.css";
 
 const AddUserForm = () => {
   const [name, setName] = useState("");
@@ -83,6 +84,7 @@ const AddUserForm = () => {
       Salt: generatedSalt,
       HashPW: hashedPassword
     };
+    
 
     try {
       // Send POST request to add the new user

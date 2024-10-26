@@ -4,8 +4,10 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import {TextField} from "@mui/material";
+import {FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import HandleCookies from "../helpers/HandleCookies";
+import subGenres from "../data/subGenres";
+import DatePicker from "react-datepicker";
 
 const AddProductForm = ({ }) => {
     const [name, setName] = useState("");
@@ -15,10 +17,13 @@ const AddProductForm = ({ }) => {
     const [subgenre, setSubgenre] = useState(null);
     const [published, setPublished] = useState(null);
     const [postError, setPostError] = useState(null); // State to track any errors during product addition
+    const [subGenre, setSubGenre] = useState(null);
 
     const { authToken } = HandleCookies();
+    
 
-  // Handles form submission for adding the new product
+
+    // Handles form submission for adding the new product
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     
@@ -28,9 +33,9 @@ const AddProductForm = ({ }) => {
         Author: author,
         Description: description,
         Genre: genre,
-        SubGenre: subgenre,
+        SubGenre: subGenre,
         Published: published,
-        LastUpdatedBy: authToken.UserName,
+        LastUpdatedBy: authToken.username,
         LastUpdated: new Date(),
     };
 
@@ -46,6 +51,7 @@ const AddProductForm = ({ }) => {
           },
         }
       );
+      window.location.reload();
     } catch (error) {
       setPostError(error); // Set error state to display error message
     }
@@ -62,7 +68,7 @@ const AddProductForm = ({ }) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="addUserForm"
+                  className="addProductForm"
               />
 
               <TextField
@@ -73,12 +79,53 @@ const AddProductForm = ({ }) => {
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
                   required
-                  className="addUserForm"
+                  className="addProductForm"
               />
 
+              <FormControl
+                  margin="dense"
+                  className="addProductSelectForm"
+                  required>
+                  <InputLabel id="genre-number-label">Genre</InputLabel>
+                  <Select
+                      labelId="genre-number-label"
+                      value={genre}
+                      onChange={(e) => setGenre(e.target.value)}
+                  >
+                      <MenuItem value={1}>1 - Book</MenuItem>
+                      <MenuItem value={2}>2 - Movie</MenuItem>
+                      <MenuItem value={3}>3 - Game</MenuItem>
+                  </Select>
+              </FormControl>
+
+              <FormControl margin="dense"
+                           className="addProductSelectForm"
+                            required >
+                  <InputLabel id="subgenre-label">SubGenre</InputLabel>
+                  <Select
+                      labelId="subgenre-label"
+                      value={subGenre}
+                      onChange={(e) => setSubGenre(e.target.value)}
+                  >
+                      {genre && subGenres[genre].map((sub) => (
+                          <MenuItem key={sub.id} value={sub.id}>
+                              {sub.name}
+                          </MenuItem>
+                      ))}
+                  </Select>
+              </FormControl>
+
+              {/* https://refine.dev/blog/react-date-picker/#introduction */}
+              <DatePicker
+                  selected={published}
+                  onChange={setPublished}
+                  className="datePicker"
+                  placeholderText="Select a date"
+                  required
+              />
+          </div>
               <TextField
                   margin="dense"
-                  fullWidth
                   label="Description"
                   type="text"
                   name="Description"
@@ -86,14 +133,19 @@ const AddProductForm = ({ }) => {
                   onChange={(e) => setDescription(e.target.value)}
                   required
                   multiline
-                  className="addUserForm"
+                  className="addProductFormDescription"
               />
-                  
-              <button type="submit">Add Product</button>
-          </div>
-              {/* Display submission errors with a custom message */}
-              {postError && (
-                  <div style={{color: "red", marginTop: "10px"}}>
+
+
+                <div className="buttonSubmitContainer">
+                    <button type="submit" className="buttonSubmit">
+                        <strong>Add product</strong>
+                    </button>
+                </div>
+
+          {/* Display submission errors with a custom message */}
+          {postError && (
+              <div style={{color: "red", marginTop: "10px"}}>
                       <strong>Error: </strong>
                       {postError}
                   </div>

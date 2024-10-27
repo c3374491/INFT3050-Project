@@ -2,7 +2,11 @@
 
 import axios from 'axios';
 
-
+const TOListData = null;
+const CustomerID = null;
+const phoneNumber = null;
+const streetAddress = null;
+const CVV = "321";
 
 /*axios.get('{{baseUrl}}/api/v1/db/data/v1/inft3050/Product?limit=1000')
 	.then(response => {
@@ -125,15 +129,22 @@ const processLogin = async (username, password, token) => {
 		if (await sha256(user.Salt + password) === user.HashPW) {
 			console.log("User login successful");
 
-			const CustomerID = user['TO List'][0].CustomerID;
+			try { const CustomerID = user['TO List'][0].CustomerID; }
+			catch { const CustomerID = null };
 
-			const TOListUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/TO/${CustomerID}`
-			const TOListData = await fetchTOListData(TOListUrl, token);
+			try {
+				const TOListUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/TO/${CustomerID}`
+				const TOListData = await fetchTOListData(TOListUrl, token);
+				const phoneNumber = TOListData.PhoneNumber;
+				const streetAddress = TOListData.StreetAddress;
+				const CVV = TOListData.CVV;
+			}
+			catch { const TOListData = null };
 
 			const ordersUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Orders/3`
 			const ordersData = await fetchOrdersData(ordersUrl, token);
 
-			
+
 			const stocktakeID = ordersData['Stocktake List'][0].ItemId;
 
 			const stocktakeUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Stocktake/${stocktakeID}`
@@ -143,35 +154,40 @@ const processLogin = async (username, password, token) => {
 			const productsUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Product/${stocktakeProductID}?limit=1000`
 			const productData = await fetchStocktakeData(productsUrl, token);
 
+			if (TOListData == null) {
+				console.log("TOList is empty")
+			}
+			else {console.log(TOListData)}
 
-
-			// Return a token and user info if login is successful
-			return {
-				token,
-				userInfo: {
-					name: user.Name,
-					email: user.Email,
-					phoneNumber: TOListData.PhoneNumber,
-					streetAddress: TOListData.StreetAddress,
-					postCode: TOListData.PostCode,
-					suburb: TOListData.Suburb,
-					state: TOListData.State,
-					cardNumber: TOListData.CardNumber,
-					cardOwner: TOListData.CardOwner,
-					cardExpiry: TOListData.Expiry,
-					cvv: TOListData.CVV,
-					customerNumber: user['TO List'][0].CustomerID,
-					patronNumber: user['TO List'][0].PatronId,
-					patron: true,
-					orderAddress: ordersData.StreetAddress,
-					orderPostcode: ordersData.PostCode,
-					orderSuburb: ordersData.Suburb,
-					orderState: ordersData.State,
-					orderList: ordersData['Stocktake List'],
-					productID: stocktakeData.ProductId,
-					productDataItem: productData,
-				},
-			};
+				// Return a token and user info if login is successful
+				return {
+					token,
+					userInfo: {
+						name: user.Name,
+						email: user.Email,
+						phoneNumber,
+						streetAddress,
+						CVV,
+						//postCode: TOListData.PostCode,
+						//suburb: TOListData.Suburb,
+						//state: TOListData.State,
+						//cardNumber: TOListData.CardNumber,
+						//cardOwner: TOListData.CardOwner,
+						//cardExpiry: TOListData.Expiry,
+						//cvv: TOListData.CVV,
+						//customerNumber: user['TO List'][0].CustomerID,
+						//patronNumber: user['TO List'][0].PatronId,
+						patron: true,
+						orderAddress: ordersData.StreetAddress,
+						orderPostcode: ordersData.PostCode,
+						orderSuburb: ordersData.Suburb,
+						orderState: ordersData.State,
+						orderList: ordersData['Stocktake List'],
+						productID: stocktakeData.ProductId,
+						productDataItem: productData,
+						previousOrder: true,
+					},
+				};
 		}
 	}
 

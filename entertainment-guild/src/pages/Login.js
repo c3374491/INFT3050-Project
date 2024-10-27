@@ -1,4 +1,4 @@
-import { Box, FormControl, FormGroup, TextField, Button, Typography } from '@mui/material';
+import { Box, FormControl, FormGroup, TextField, Button, Typography, Alert } from '@mui/material';
 import { useState } from "react";
 import HandleLogin from '../helpers/HandleLogin';
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
 
 	const navigate = useNavigate();
-	
+
 	const { setAuthToken, authToken, clearAuthToken } = HandleCookies();
 
 	const [username, setUsername] = useState("");
@@ -29,7 +29,6 @@ const Login = () => {
 		}
 		else {
 			// Authentication failed
-			alert("incorrect login"); // will add more and make better
 			setResult(false);
 		}
 	}
@@ -44,7 +43,6 @@ const Login = () => {
 	}
 
 
-
 	return (
 		<Box display="flex" justifyContent="center">
 			<Box
@@ -55,6 +53,11 @@ const Login = () => {
 					'.MuiButton-root': { m: 1 },
 				}}>
 				<h1>Login</h1>
+				{result === false && (
+					<Alert variant="outlined" severity="error">
+						<Typography variant='body2'>Username or Password is incorrect!</Typography>
+					</Alert>
+				)}
 				<form method="post" onSubmit={handleSubmit}>
 					<FormControl>
 						<FormGroup>
@@ -72,6 +75,7 @@ const Login = () => {
 				</form>
 				<Link>I forgot my password...</Link>
 				<p>Don't have an account? <Link to="/signup">Sign up!</Link></p>
+
 				{/* add something here for failed login */}
 			</Box >
 		</Box >

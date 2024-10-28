@@ -56,12 +56,10 @@ const processLogin = async (username, password, token) => {
 		const user = userData.list[0];
 		if (await sha256(user.Salt + password) === user.HashPW) {
 			console.log("User login successful");
-			console.log(user)
 			// Return a token and user info if login is successful
 			return {
 				token,
 				userInfo: {
-					id: user.UserID,
 					name: user.Name,
 					email: user.Email,
 					salt: user.Salt, // Include salt for future operations

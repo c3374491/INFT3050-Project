@@ -15,8 +15,8 @@ const Profile = () => {
 		navigate('/');
 	};
 
-	const itemNameFromOrder = authToken.productTitleArray;
-	const itemAuthorFromOrder = authToken.productAuthorArray;
+	if (authToken) { var itemNameFromOrder = authToken.orderedProductsArray; }
+	else { var itemNameFromOrder = null; }
 
 	return (
 		<Box display="flex" justifyContent="center" float="center" justifySelf="center">
@@ -83,7 +83,7 @@ const Profile = () => {
 									<Typography variant="body1">Delivery State: {authToken.orderState || "No Delivery State"}</Typography>
 									<br />
 									<Typography variant="h6" sx={{textDecoration: "underline"}}>Item Details</Typography>
-  									<ol>{itemNameFromOrder.map((item) => <li><strong>{item[0]}</strong> by <em>{item[1]}</em></li>)}</ol>
+  									<ol>{itemNameFromOrder.map((item) => <li><strong>{item[0]}</strong> by <em>{item[1]}</em></li>) || "No Items"}</ol>
 								</AccordionDetails>
 							</Accordion>
 						)}

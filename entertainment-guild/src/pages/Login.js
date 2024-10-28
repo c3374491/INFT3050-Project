@@ -42,7 +42,19 @@ const Login = () => {
 		setPassword(event.target.value);
 	}
 
-
+	const doRequestPasswordReset = async function () {
+		// Note that this value come from state variables linked to your text input
+		const emailValue = authToken.email;
+		try {
+			await Parse.User.requestPasswordReset(emailValue);
+			alert(`Success! Please check ${authToken.email} to proceed with password reset.`);
+			return true;
+		} catch(error) {
+			// Error can be caused by lack of Internet connection
+			alert(`Error! ${error}`);
+			return false;
+		}
+	};
 
 	return (
 		<Box display="flex" justifyContent="center">

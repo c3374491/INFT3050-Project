@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { TextField } from "@mui/material";
 import {sha256} from "../helpers/HandleLogin";
+import "../style.css";
 
 const AddUserForm = () => {
   const [name, setName] = useState("");
@@ -15,8 +16,6 @@ const AddUserForm = () => {
   const [error, setError] = useState(""); // State to store any fetch error
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null); // Error state for existing password
-  const [salt, setSalt] = useState("");
-  const [hashPW, setHashPW] = useState("");
 
   // Fetch users from the API
   useEffect(() => {
@@ -85,6 +84,7 @@ const AddUserForm = () => {
       Salt: generatedSalt,
       HashPW: hashedPassword
     };
+    
 
     try {
       // Send POST request to add the new user

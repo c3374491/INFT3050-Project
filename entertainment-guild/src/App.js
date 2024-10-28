@@ -20,6 +20,7 @@ import ProductListSearch from "./pages/ProductListSearch";
 import { CookiesProvider } from 'react-cookie';
 import HandleCookies from './helpers/HandleCookies';
 import Checkout from "./pages/Checkout";
+import AdminRoute from "./component/AdminRoute";
 
 
 const App = () => {
@@ -38,13 +39,14 @@ const App = () => {
 				<Route path="/movies" element={<Movies />} />
 				<Route path="/cart" element={<Cart />} />
 				<Route path="/signup" element={<SignUp />} />
-				<Route path="/management" element={<Management />} />
-				<Route path="/manageusers" element={<ManageUsers />} />
-				<Route path="/manageaccount"element={<ManageAccount />} />
-				<Route path="/manageproducts" element={<ManageProducts />} />
+				<Route path="/checkout" element={<Checkout />} />
+				<Route path="/productlistsearch" element={<ProductListSearch />} />
+
+				{/* Protect the admin routes */}
+				<Route path="/admin/management" element={<AdminRoute><Management /></AdminRoute>} />
+				<Route path="/admin/manageusers" element={<AdminRoute><ManageUsers /></AdminRoute>} />
+				<Route path="/admin/manageproducts" element={<AdminRoute><ManageProducts /></AdminRoute>} />
 				<Route path="*" element={<ErrorNotFound />} />
-				<Route path="productlistsearch" element={<ProductListSearch />} />
-				<Route path="/checkout" element={<Checkout/> }/>
 			</Routes>
 		</CookiesProvider>
 	);

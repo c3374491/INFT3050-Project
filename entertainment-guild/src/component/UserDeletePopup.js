@@ -9,20 +9,65 @@ const UserDeletePopup = ({ user, open, onClose }) => {
     // Handles form submission for deleting the user
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(user);
 
         try {
-            // Send DELETE request to the API with the specified username
-            await axios.delete(
+            // Step 1: Get the user's product list
+            const response = await axios.get(
                 `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ", // Auth token for API
+                        "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
                     },
                 }
             );
+
+            console.log("Response Data:", response.data); // Log the response
+
+            // Check if the user has products
+            if (response.data.productList.length > 0) {
+                console.log("User has products");
+
+                // Create the update object with the required fields
+                const updatedUser = {
+                    Email: null,
+                    Name: null,
+                    Salt: null,
+                    HashPW: null,
+                    IsAdmin: 1,
+                };
+
+                console.log(updatedUser);
+                // Use axios to PATCH the user
+                const updateResponse = await axios.patch(
+                    `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
+                    updatedUser,
+                    {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
+                        },
+                    }
+                );
+
+                console.log('User updated:', updateResponse.data);
+            } else {
+                // Step 3: Delete the user if they have no products
+                await axios.delete(
+                    `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+                        },
+                    }
+                );
+            }
+
             onClose();
-            window.location.reload();
+            //window.location.reload();
         } catch (error) {
             if (error.response) {
                 console.error("Error response data:", error.response.data); // Log the server response

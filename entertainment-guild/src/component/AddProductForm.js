@@ -4,43 +4,39 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import {FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import HandleCookies from "../helpers/HandleCookies";
+import subGenres from "../data/subGenres";
+import DatePicker from "react-datepicker";
 
-const AddProductForm = ({ getProducts }) => {
-  // State to hold data for the new product to be added
-  const [newProduct, setNewProduct] = useState({
-    Author: "",
-    Description: "",
-    Genre: "",
-    LastUpdatedBy: "",
-    Name: "",
-    Published: "",
-    SubGenre: 1, // Default value for SubGenre
-  });
-  const [postError, setPostError] = useState(null); // State to track any errors during product addition
+const AddProductForm = ({ }) => {
+    const [name, setName] = useState("");
+    const [author, setAuthor] = useState("");
+    const [description, setDescription] = useState("");
+    const [genre, setGenre] = useState(null);
+    const [subgenre, setSubgenre] = useState(null);
+    const [published, setPublished] = useState(null);
+    const [postError, setPostError] = useState(null); // State to track any errors during product addition
+    const [subGenre, setSubGenre] = useState(null);
 
-  // Handles changes to input fields for the new product
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value, 
-    }));
-  };
+    const { authToken } = HandleCookies();
+    
 
-  // Handles form submission for adding the new product
+
+    // Handles form submission for adding the new product
   const handleSubmit = async (e) => {
     e.preventDefault(); 
-
+    
     // Prepare the product data for POST request
     const productToPost = {
-      Author: newProduct.Author,
-      Description: newProduct.Description,
-      Genre: parseInt(newProduct.Genre, 10), 
-      LastUpdated: new Date().toISOString(), 
-      LastUpdatedBy: newProduct.LastUpdatedBy,
-      Name: newProduct.Name,
-      Published: newProduct.Published,
-      SubGenre: parseInt(newProduct.SubGenre, 10), 
+        Name: name,
+        Author: author,
+        Description: description,
+        Genre: genre,
+        SubGenre: subGenre,
+        Published: published,
+        LastUpdatedBy: authToken.username,
+        LastUpdated: new Date(),
     };
 
     try {
@@ -55,101 +51,107 @@ const AddProductForm = ({ getProducts }) => {
           },
         }
       );
-      getProducts(); // Refresh the product list after successful addition
+      window.location.reload();
     } catch (error) {
       setPostError(error); // Set error state to display error message
     }
   };
-
+  {/* Form to input data for the new product */}
   return (
-    <div>
-      <h2>Add New Product</h2>
-      {/* Form to input data for the new product */}
       <form onSubmit={handleSubmit}>
-        <label>
-          Author:
-          <input
-            type="text"
-            name="Author"
-            value={newProduct.Author}
-            onChange={handleInputChange}
-            required 
-          />
-        </label>
-        <br />
-        <label>
-          Description:
-          <input
-            type="text"
-            name="Description"
-            value={newProduct.Description}
-            onChange={handleInputChange}
-            required 
-          />
-        </label>
-        <br />
-        <label>
-          Genre:
-          <input
-            type="number"
-            name="Genre"
-            value={newProduct.Genre}
-            onChange={handleInputChange}
-            required 
-          />
-        </label>
-        <br />
-        <label>
-          Name:
-          <input
-            type="text"
-            name="Name"
-            value={newProduct.Name}
-            onChange={handleInputChange}
-            required 
-          />
-        </label>
-        <br />
-        <label>
-          Published:
-          <input
-            type="text"
-            name="Published"
-            value={newProduct.Published}
-            onChange={handleInputChange}
-            required 
-          />
-        </label>
-        <br />
-        <label>
-          Last Updated By:
-          <input
-            type="text"
-            name="LastUpdatedBy"
-            value={newProduct.LastUpdatedBy}
-            onChange={handleInputChange}
-            required 
-          />
-        </label>
-        <br />
-        <label>
-          SubGenre:
-          <input
-            type="number"
-            name="SubGenre"
-            value={newProduct.SubGenre}
-            onChange={handleInputChange}
-            required 
-          />
-        </label>
-        <br />
-        <button type="submit">Add Product</button>
-      </form>
+          <div className="addProductContainer">
+              <TextField
+                  margin="dense"
+                  label="Name"
+                  type="text"
+                  name="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="addProductForm"
+              />
 
-      {/* Display any errors that occurred during the add operation */}
-      {postError && <p>Error: {postError.message}</p>}
-    </div>
-  );
+              <TextField
+                  margin="dense"
+                  label="Author"
+                  type="text"
+                  name="Author"
+                  value={author}
+                  onChange={(e) => setAuthor(e.target.value)}
+                  required
+                  className="addProductForm"
+              />
+
+              <FormControl
+                  margin="dense"
+                  className="addProductSelectForm"
+                  required>
+                  <InputLabel id="genre-number-label">Genre</InputLabel>
+                  <Select
+                      labelId="genre-number-label"
+                      value={genre}
+                      onChange={(e) => setGenre(e.target.value)}
+                  >
+                      <MenuItem value={1}>1 - Book</MenuItem>
+                      <MenuItem value={2}>2 - Movie</MenuItem>
+                      <MenuItem value={3}>3 - Game</MenuItem>
+                  </Select>
+              </FormControl>
+
+              <FormControl margin="dense"
+                           className="addProductSelectForm"
+                            required >
+                  <InputLabel id="subgenre-label">SubGenre</InputLabel>
+                  <Select
+                      labelId="subgenre-label"
+                      value={subGenre}
+                      onChange={(e) => setSubGenre(e.target.value)}
+                  >
+                      {genre && subGenres[genre].map((sub) => (
+                          <MenuItem key={sub.id} value={sub.id}>
+                              {sub.name}
+                          </MenuItem>
+                      ))}
+                  </Select>
+              </FormControl>
+
+              {/* https://refine.dev/blog/react-date-picker/#introduction */}
+              <DatePicker
+                  selected={published}
+                  onChange={setPublished}
+                  className="datePicker"
+                  placeholderText="Select a date"
+                  required
+              />
+          </div>
+              <TextField
+                  margin="dense"
+                  label="Description"
+                  type="text"
+                  name="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                  multiline
+                  className="addProductFormDescription"
+              />
+
+
+                <div className="buttonSubmitContainer">
+                    <button type="submit" className="buttonSubmit">
+                        <strong>Add product</strong>
+                    </button>
+                </div>
+
+          {/* Display submission errors with a custom message */}
+          {postError && (
+              <div style={{color: "red", marginTop: "10px"}}>
+                      <strong>Error: </strong>
+                      {postError}
+                  </div>
+              )}
+      </form>
+);
 };
 
 export default AddProductForm;

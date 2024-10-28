@@ -70,6 +70,7 @@ const ShowUsers = ({ apiUrl, searchTerm}) => {
     }, [apiUrl]);
 
     const filteredUsers = users
+        .filter(user => user.Name !== null)
         .filter(user =>
             user.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.UserName.toLowerCase().includes(searchTerm.toLowerCase() || 
@@ -92,7 +93,9 @@ const ShowUsers = ({ apiUrl, searchTerm}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {filteredUsers.map((user, index) => (
+                    {filteredUsers
+                        .filter(user => user.Name !== null)
+                        .map((user, index) => (
                         <tr key={index} className={index % 2 === 0 ? "evenRow" : "oddRow"}>
                             <td>{user.UserName}</td>
                             <td>{user.Name}</td>

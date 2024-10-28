@@ -32,6 +32,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength, orientation
                         'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
                     }
                 });
+                console.log(response.data.list);
 
                 if (Array.isArray(response.data.list)) {
                     const filteredProducts = response.data.list.filter(item => item.Genre === genre);

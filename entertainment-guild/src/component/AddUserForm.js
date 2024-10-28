@@ -16,6 +16,7 @@ const AddUserForm = () => {
   const [error, setError] = useState(""); // State to store any fetch error
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null); // Error state for existing password
+  const [isEmploye, setIsEmploye] = useState(null);
 
   // Fetch users from the API
   useEffect(() => {
@@ -87,7 +88,7 @@ const AddUserForm = () => {
     
 
     try {
-      if (isAdmin) {
+      if (isAdmin || isEmploye) {
         // Send POST request to add the new user
         await axios.post(
             "http://localhost:8080/api/v1/db/data/v1/inft3050/User",
@@ -172,12 +173,21 @@ const AddUserForm = () => {
               className="addUserForm"
           />
           <label>
-            Is Admin: 
+            Is Admin:
             <input
                 type="checkbox"
                 name="IsAdmin"
                 checked={isAdmin}
                 onChange={(e) => setIsAdmin(e.target.checked)}
+            />
+          </label>
+          <label>
+            Is Employe:
+            <input
+                type="checkbox"
+                name="IsEmploye"
+                checked={isEmploye}
+                onChange={(e) => setIsEmploye(e.target.checked)}
             />
           </label>
         </div>
@@ -186,7 +196,7 @@ const AddUserForm = () => {
             <strong>Add user</strong>
           </button>
         </div>
-          {/* Display submission errors with a custom message */}
+        {/* Display submission errors with a custom message */}
           {postError && (
               <div style={{color: "red", marginTop: "10px"}}>
                 <strong>Error: </strong>

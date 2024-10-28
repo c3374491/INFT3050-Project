@@ -5,7 +5,8 @@ const ForgotPasswordPopup = ({open , onClose}) => {
     const [password, setPassword] = useState("")
 
     const onConfirm = async () => {
-        console.log(email)
+        console.log(email);
+        console.log(password);
         
     };
     

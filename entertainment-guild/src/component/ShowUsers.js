@@ -80,9 +80,9 @@ const ShowUsers = ({ apiUrl1,apiUrl2, searchTerm}) => {
     const filteredUsers = users
         .filter(user => user.Name !== null)
         .filter(user =>
-            user.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.UserName.toLowerCase().includes(searchTerm.toLowerCase() || 
-            user.Email.toLowerCase().includes(searchTerm.toLowerCase())
+            user.Name && user.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.UserName && user.UserName.toLowerCase().includes(searchTerm.toLowerCase() || 
+            user.Email && user.Email.toLowerCase().includes(searchTerm.toLowerCase())
             ));
 
     // Display the list of users

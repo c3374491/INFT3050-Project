@@ -87,18 +87,34 @@ const AddUserForm = () => {
     
 
     try {
-      // Send POST request to add the new user
-      await axios.post(
-          "http://localhost:8080/api/v1/db/data/v1/inft3050/User",
-          userToPost,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
-            },
-          }
-      );
-      window.location.reload();
+      if (isAdmin) {
+        // Send POST request to add the new user
+        await axios.post(
+            "http://localhost:8080/api/v1/db/data/v1/inft3050/User",
+            userToPost,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+              },
+            }
+        );
+        window.location.reload();
+      }
+      else {
+        // Send POST request to add the new user
+        await axios.post(
+            "http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons",
+            userToPost,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+              },
+            }
+        );
+        window.location.reload();
+      }
     } catch (error) {
       console.error("Error response:", error.response ? error.response.data : error.message);
     }

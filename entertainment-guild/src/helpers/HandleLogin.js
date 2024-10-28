@@ -1,25 +1,4 @@
-// trying to display products from previous orders
-
 import axios from 'axios';
-
-const TOListData = null;
-const CustomerID = null;
-const phoneNumber = null;
-const streetAddress = null;
-const CVV = "321";
-
-/*axios.get('{{baseUrl}}/api/v1/db/data/v1/inft3050/Product?limit=1000')
-	.then(response => {
-		const filteredData = response.data.list.filter(item =>
-			item['Stocktake List'].some(stockItem => stockItem.ItemId === 50)
-		);
-		console.log(filteredData); // This will log the items with ItemId = 50
-	})
-	.catch(error => console.error('Error fetching data:', error));
-*/
-
-
-
 
 
 // Helper function for hashing the password using SHA-256
@@ -37,14 +16,6 @@ async function sha256(message) {
 const fetchUserData = async (url, token) => {
 	try {
 		const response = await axios.get(url, { headers: { 'xc-token': token } });
-		axios.get('http://localhost:8080/api/v1/db/data/v1/inft3050/Product?limit=1000', { headers: { 'xc-token': token } })
-			.then(response => {
-				const filteredData = response.data.list.filter(item =>
-					item['Stocktake List'].some(stockItem => stockItem.ItemId === 50)
-				);
-				console.log(filteredData); // This will log the items with ItemId = 50
-			})
-			.catch(error => console.error('Error fetching data:', error));
 		return response.data;
 	} catch (error) {
 		// Log the error but don't throw it, allowing the function to continue for other login attempts.
@@ -129,21 +100,48 @@ const processLogin = async (username, password, token) => {
 		if (await sha256(user.Salt + password) === user.HashPW) {
 			console.log("User login successful");
 
-			try { const CustomerID = user['TO List'][0].CustomerID; }
-			catch { const CustomerID = null };
+			const CustomerID = user['TO List'][0].CustomerID;
+			const TOListUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/TO/${CustomerID}`
+			const TOListData = await fetchTOListData(TOListUrl, token);
 
-			try {
-				const TOListUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/TO/${CustomerID}`
-				const TOListData = await fetchTOListData(TOListUrl, token);
-				const phoneNumber = TOListData.PhoneNumber;
-				const streetAddress = TOListData.StreetAddress;
-				const CVV = TOListData.CVV;
-			}
-			catch { const TOListData = null };
-
-			const ordersUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Orders/3`
+			const ordersUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Orders/3` // change 3 to customerID?
 			const ordersData = await fetchOrdersData(ordersUrl, token);
 
+			var stocktakeItemIdsArray = [];
+
+			// gets the ItemId's of each item from the Order associated with the Customer - adds the ID's to an array
+			for( var i=0; i < ordersData['Stocktake List'].length; i++ ) {
+				console.log(ordersData['Stocktake List'][i].ItemId);
+				stocktakeItemIdsArray.push(ordersData['Stocktake List'][i].ItemId);
+				console.log(stocktakeItemIdsArray);
+			}
+
+			var productIDArray = [];
+			// gets the productID from the stocktake table - adds the id's to an array
+			for( var i=0; i < stocktakeItemIdsArray.length; i++ ) {
+				console.log(stocktakeItemIdsArray[i]);
+				const stocktakeDatathing = await fetchStocktakeData(`http://localhost:8080/api/v1/db/data/v1/inft3050/Stocktake/${stocktakeItemIdsArray[i]}`, token);
+				console.log(stocktakeDatathing);
+				productIDArray.push(stocktakeDatathing.ProductId);
+				console.log(productIDArray);
+			}
+
+			var productTitleArray = [];
+			
+			// gets the productdeatils from the product table - adds the details to an array
+			for( var i=0; i < productIDArray.length; i++ ) {
+				var productArray = [];
+				console.log(productIDArray[i]);
+				const productDatathingy = await fetchStocktakeData(`http://localhost:8080/api/v1/db/data/v1/inft3050/Product/${productIDArray[i]}?limit=1000`, token);
+				console.log(productDatathingy.Name);
+				console.log(productDatathingy.Author);
+				productArray.push(productDatathingy.Name);
+				productArray.push(productDatathingy.Author);
+				productTitleArray.push(productArray);
+				console.log(productTitleArray);
+				//productAuthorArray.push(productDatathingy.Author);
+				//console.log(productAuthorArray);
+			}
 
 			const stocktakeID = ordersData['Stocktake List'][0].ItemId;
 
@@ -157,37 +155,36 @@ const processLogin = async (username, password, token) => {
 			if (TOListData == null) {
 				console.log("TOList is empty")
 			}
-			else {console.log(TOListData)}
+			else { console.log(TOListData) }
 
-				// Return a token and user info if login is successful
-				return {
-					token,
-					userInfo: {
-						name: user.Name,
-						email: user.Email,
-						phoneNumber,
-						streetAddress,
-						CVV,
-						//postCode: TOListData.PostCode,
-						//suburb: TOListData.Suburb,
-						//state: TOListData.State,
-						//cardNumber: TOListData.CardNumber,
-						//cardOwner: TOListData.CardOwner,
-						//cardExpiry: TOListData.Expiry,
-						//cvv: TOListData.CVV,
-						//customerNumber: user['TO List'][0].CustomerID,
-						//patronNumber: user['TO List'][0].PatronId,
-						patron: true,
-						orderAddress: ordersData.StreetAddress,
-						orderPostcode: ordersData.PostCode,
-						orderSuburb: ordersData.Suburb,
-						orderState: ordersData.State,
-						orderList: ordersData['Stocktake List'],
-						productID: stocktakeData.ProductId,
-						productDataItem: productData,
-						previousOrder: true,
-					},
-				};
+			// Return a token and user info if login is successful
+			return {
+				token,
+				userInfo: {
+					name: user.Name,
+					email: user.Email,
+					phoneNumber: TOListData.PhoneNumber,
+					streetAddress: TOListData.StreetAddress,
+					CVV: TOListData.CVV,
+					postCode: TOListData.PostCode,
+					suburb: TOListData.Suburb,
+					state: TOListData.State,
+					cardNumber: TOListData.CardNumber,
+					cardOwner: TOListData.CardOwner,
+					cardExpiry: TOListData.Expiry,
+					cvv: TOListData.CVV,
+					customerNumber: user['TO List'][0].CustomerID,
+					patronNumber: user['TO List'][0].PatronId,
+					patron: true,
+					orderAddress: ordersData.StreetAddress,
+					orderPostcode: ordersData.PostCode,
+					orderSuburb: ordersData.Suburb,
+					orderState: ordersData.State,
+					orderList: ordersData['Stocktake List'],
+					previousOrder: true,
+					productTitleArray,
+				},
+			};
 		}
 	}
 

@@ -3,7 +3,6 @@ import { Typography, Box, Button, Card, Accordion, AccordionDetails, AccordionSu
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HandleCookies from '../helpers/HandleCookies';
 import { useNavigate, Link } from 'react-router-dom';
-import RetrievePreviousOrder from '../component/RetrievePreviousOrder';
 
 const Profile = () => {
 
@@ -15,6 +14,9 @@ const Profile = () => {
 		clearAuthToken();
 		navigate('/');
 	};
+
+	const itemNameFromOrder = authToken.productTitleArray;
+	const itemAuthorFromOrder = authToken.productAuthorArray;
 
 	return (
 		<Box display="flex" justifyContent="center" float="center" justifySelf="center">
@@ -58,7 +60,7 @@ const Profile = () => {
 								<AccordionDetails sx={{ backgroundColor: '#dfdfdf' }}>
 									<Typography variant="body1">Card Number: {authToken.cardNumber || "No Card Number"}</Typography>
 									<Typography variant="body1">Cardholder Name: {authToken.cardOwner || "No Card Owner"}</Typography>
-									<Typography variant="body1">Expiry Date &#40;mm/yy&#41;: {authToken.expiry || "No Card Expiry"}</Typography>
+									<Typography variant="body1">Expiry Date &#40;mm/yy&#41;: {authToken.cardExpiry || "No Card Expiry"}</Typography>
 									<Typography variant="body1">Card Verification Value &#40;CVV&#41;: {authToken.CVV || "No Card CVV"}</Typography>
 								</AccordionDetails>
 							</Accordion>)}
@@ -81,11 +83,7 @@ const Profile = () => {
 									<Typography variant="body1">Delivery State: {authToken.orderState || "No Delivery State"}</Typography>
 									<br />
 									<Typography variant="h6" sx={{textDecoration: "underline"}}>Item Details</Typography>
-									<p>{authToken.productID}</p>
-									<ol>
-										<li>"{authToken.productDataItem.Name}" by {authToken.productDataItem.Author}</li>
-									</ol>
-
+  									<ol>{itemNameFromOrder.map((item) => <li><strong>{item[0]}</strong> by <em>{item[1]}</em></li>)}</ol>
 								</AccordionDetails>
 							</Accordion>
 						)}

@@ -10,7 +10,7 @@ const Login = () => {
 
 	const navigate = useNavigate();
 
-	const { setAuthToken, authToken, clearAuthToken } = HandleCookies();
+	const { setAuthToken, authToken } = HandleCookies();
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");

@@ -41,6 +41,7 @@ const App = () => {
 				<Route path="/signup" element={<SignUp />} />
 				<Route path="/checkout" element={<Checkout />} />
 				<Route path="/productlistsearch" element={<ProductListSearch />} />
+				<Route path="/ManageAccount" element={<ManageAccount />} />
 
 				{/* Protect the admin routes */}
 				<Route path="/admin/management" element={<AdminRoute><Management /></AdminRoute>} />

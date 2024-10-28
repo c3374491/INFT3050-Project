@@ -23,7 +23,7 @@ const ManageAccount = () => {
 
     // Check if authToken and user ID are available
     useEffect(() => {
-        if (!authToken || !authToken.id) { 
+        if (!authToken || !authToken.username) { 
             setError('User ID not found. Please log in again.');
         }
     }, [authToken]);
@@ -73,7 +73,7 @@ const ManageAccount = () => {
 
             // Use a PATCH request to the correct URL using the patron's UserID as the identifier
             const response = await axios.patch(
-                `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.id}`, // Use UserID in the URL path
+                `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.username}`, // Use UserID in the URL path
                 updatedUser,
                 {
                     headers: {

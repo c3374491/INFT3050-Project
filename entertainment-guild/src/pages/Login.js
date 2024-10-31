@@ -4,6 +4,7 @@ import HandleLogin from '../helpers/HandleLogin';
 import { Link } from "react-router-dom";
 import HandleCookies from '../helpers/HandleCookies';
 import { useNavigate } from 'react-router-dom';
+import ForgotPasswordPopup from "../component/ForgotPasswordPopup";
 
 
 const Login = () => {
@@ -15,6 +16,7 @@ const Login = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [result, setResult] = useState(null); // null indicates no attempt, true for success, false for failure
+	const [showForgotPasswordPopup, setShowForgotPasswordPopup] = useState(false);
 
 	async function handleSubmit(event) {
 		event.preventDefault(); //Prevent reloading of the page
@@ -42,6 +44,11 @@ const Login = () => {
 		setPassword(event.target.value);
 	}
 
+	const handleForgotPasswordClick = () =>
+		setShowForgotPasswordPopup(true);
+		
+	const handleCloseForgotPasswordPopup = () => 
+		setShowForgotPasswordPopup(false);
 
 
 	return (
@@ -69,9 +76,12 @@ const Login = () => {
 						<Button type="submit" variant="outlined">Submit</Button>
 					</Box>
 				</form>
-				<Link>I forgot my password...</Link>
+				<Link onClick={handleForgotPasswordClick} >
+					I forgot my password...
+				</Link>
 				<p>Don't have an account? <Link to="/signup">Sign up!</Link></p>
 			</Box >
+			{showForgotPasswordPopup && <ForgotPasswordPopup open={showForgotPasswordPopup} onClose={handleCloseForgotPasswordPopup} />}
 		</Box >
 	);
 }

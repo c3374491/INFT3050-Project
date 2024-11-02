@@ -2,7 +2,8 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Ty
 import React, {useState} from "react";
 import axios from "axios";
 import {sha256} from "../helpers/HandleLogin";
-const ForgotPasswordPopup = ({open , onClose}) => {
+import Snackbar from "@mui/material/Snackbar";
+const ForgotPasswordPopup = ({open , onClose, onPasswordChangeSuccess}) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -13,7 +14,8 @@ const ForgotPasswordPopup = ({open , onClose}) => {
             if (user) {
                 await updateUserPassword(user);
                 console.log("Password updated !");
-                onClose();
+                onPasswordChangeSuccess();
+               onClose();
             } else {
                 console.log("User not found ou multiples user found.");
                 setError("User not found");
@@ -22,6 +24,7 @@ const ForgotPasswordPopup = ({open , onClose}) => {
             console.error("Error updating the password :", err);
         }
     };
+    
 
     const fetchUser = async () => {
         try {

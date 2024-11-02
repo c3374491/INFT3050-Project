@@ -14,8 +14,12 @@ const Profile = () => {
     navigate('/');
   }
 
-  function handleManageAccount() {
-    navigate('/ManageAccount'); // Navigate to the ManageAccount.js page
+  function handleManageAccountPassword() {
+    navigate('/ManageAccountPassword'); // Navigate to the ManageAccount.js page
+  }
+
+  function handleManageAccountDetails() {
+    navigate('/ManageAccountDetails'); // Navigate to the ManageAccount.js page
   }
 
   return (
@@ -26,14 +30,19 @@ const Profile = () => {
           <Box>
             <Typography variant="h6">Welcome, {authToken.name}!</Typography>
             <Typography variant="body1">Email: {authToken.email}</Typography>
-            <Typography variant="body1"><li> {authToken.TOList}</li></Typography>
-            <Typography variant="body1">Admin Status: {authToken.isAdmin ? "Yes" : "No"}</Typography>
           </Box>
 
-          {/* Manage Account Button */}
+          {/* Manage Password Button */}
           <Box mt={2}>
-            <Button variant="outlined" fullWidth onClick={handleManageAccount}>
-              Manage Account
+            <Button variant="outlined" fullWidth onClick={handleManageAccountPassword}>
+              Manage Password
+            </Button>
+          </Box>
+
+          {/* Manage Details Button */}
+          <Box mt={2}>
+            <Button variant="outlined" fullWidth onClick={handleManageAccountDetails}>
+              Manage Account Details
             </Button>
           </Box>
 

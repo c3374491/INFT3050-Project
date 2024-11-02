@@ -13,7 +13,8 @@ import SignUp from "./pages/SignUp";
 import Management from "./pages/Management";
 import ManageUsers from "./pages/ManageUsers";
 import ManageProducts from "./pages/ManageProducts";
-import ManageAccount from './pages/ManageAccount.js';
+import ManageAccountPassword from './pages/ManageAccountPassword.js';
+import ManageAccountDetails from './pages/ManageAccountDetails.js';
 import NavBarUsers from "./component/NavBarUsers";
 import NavBarAdmin from "./component/NavBarAdmin"
 import ProductListSearch from "./pages/ProductListSearch";
@@ -41,7 +42,8 @@ const App = () => {
 				<Route path="/signup" element={<SignUp />} />
 				<Route path="/checkout" element={<Checkout />} />
 				<Route path="/productlistsearch" element={<ProductListSearch />} />
-				<Route path="/ManageAccount" element={<ManageAccount />} />
+				<Route path="/ManageAccountPassword" element={<ManageAccountPassword />} />
+				<Route path="/ManageAccountDetails" element={<ManageAccountDetails />} />
 
 				{/* Protect the admin routes */}
 				<Route path="/admin/management" element={<AdminRoute><Management /></AdminRoute>} />

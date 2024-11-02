@@ -1,29 +1,26 @@
 // ManageAccount.js
 // Author: Liam Kimberley || C3375248
-// Last Updated: 26/10/2024
+// Last Updated: 2/11/2024
 
 import React, { useState, useEffect } from 'react';
 import { Typography, Box, TextField, Button } from '@mui/material';
 import axios from 'axios';
 import HandleCookies from '../helpers/HandleCookies';
 import { sha256 } from '../helpers/HandleLogin'; // Named import for sha256
-import PatronDeletePopup from '../component/PatronDeletePopup'; // Import your delete popup component
 
-const ManageAccount = () => {
+const ManageAccountPassword = () => {
     const { authToken, setAuthToken } = HandleCookies();
     const [formData, setFormData] = useState({
-        name: '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
     });
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
-    const [openDeletePopup, setOpenDeletePopup] = useState(false); // State to control the popup
 
     // Check if authToken and user ID are available
     useEffect(() => {
-        if (!authToken || !authToken.username) { 
+        if (!authToken || !authToken.email) { 
             setError('User ID not found. Please log in again.');
         }
     }, [authToken]);
@@ -65,18 +62,17 @@ const ManageAccount = () => {
 
             // Prepare the updated user data
             const updatedUser = {
-                Email: authToken.email,
-                Name: formData.name || undefined, // Only include if a name is provided
                 HashPW: newHashedPassword,
                 Salt: authToken.salt // Keep the salt
             };
 
             // Use a PATCH request to the correct URL using the patron's UserID as the identifier
             const response = await axios.patch(
-                `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.username}`, // Use UserID in the URL path
+                `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.id}`, // Use UserID in the URL path
                 updatedUser,
                 {
-                    headers: {
+                    headers: 
+                    {
                         'Content-Type': 'application/json',
                         'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ' // Auth token for API
                     }
@@ -86,7 +82,6 @@ const ManageAccount = () => {
             // Update the token with the new hashed password and name
             const updatedToken = { 
                 ...authToken, 
-                name: formData.name || authToken.name, // Use previous name if no new name is provided
                 hashPW: newHashedPassword // Ensure you're passing the new hashed password correctly
             };
 
@@ -100,29 +95,12 @@ const ManageAccount = () => {
         }
     };
 
-    const handleDeleteAccount = () => {
-        setOpenDeletePopup(true); // Open the delete confirmation popup
-    };
-
-    const handleClosePopup = () => {
-        setOpenDeletePopup(false); // Close the delete confirmation popup
-    };
-
     return (
         <div>
-            <h1>Manage Account</h1>
+            <h1>Manage Password</h1>
             <Box>
-                <Typography variant="h4">UPDATE YOUR ACCOUNT</Typography>
+                <Typography variant="h4">UPDATE YOUR PASSWORD</Typography>
                 <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Name"
-                        name="name"
-                        defaultValue={authToken.Name}
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                    />
                     <TextField
                         label="Current Password"
                         name="currentPassword"
@@ -154,20 +132,15 @@ const ManageAccount = () => {
                         margin="normal"
                     />
                     <Button type="submit" variant="contained" fullWidth color="primary">
-                        Update Account
+                        Update Password
                     </Button>
-                    <Box mt={2}>
-                        <Button variant="contained" fullWidth color="error" onClick={handleDeleteAccount}>
-                            Delete Account
-                        </Button>
-                    </Box>
                 </form>
                 {error && <Typography color="error">{error}</Typography>}
                 {successMessage && <Typography color="primary">{successMessage}</Typography>}
             </Box>
-            <PatronDeletePopup open={openDeletePopup} onClose={handleClosePopup} /> {/* Render the popup */}
+            
         </div>
     );
 };
 
-export default ManageAccount;
+export default ManageAccountPassword;

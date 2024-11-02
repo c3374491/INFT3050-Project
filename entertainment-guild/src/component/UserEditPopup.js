@@ -21,31 +21,59 @@ const UserEditPopup = ({ open, user, onClose }) => {
     const [isAdmin, setIsAdmin] = useState(Boolean(user.IsAdmin));
 
     const onSave = async () => {
-        const updatedUser = {
-            UserName: username,
-            Email: email,
-            Name: name,
-            IsAdmin: isAdmin ? 1 : 0,
-        };
 
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`, {
-                method: 'PATCH',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
-                },
-                body: JSON.stringify(updatedUser),
-            });
+            if (user.UserName !== undefined)
+            {
+                const updatedUser = {
+                    UserName: user.UserName,
+                    Email: email,
+                    Name: name,
+                    IsAdmin: isAdmin ? 1 : 0,
+                };
+                const response = await fetch(`http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
+                    },
+                    body: JSON.stringify(updatedUser),
+                });
 
-            if (!response.ok) {
-                const errorData = await response.json(); 
-                throw new Error(`Error when update the user: ${errorData.message || response.statusText}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Error when update the user: ${errorData.message || response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('User updated:', data);
             }
+            else {
+                const updatedUser = {
+                    Email: email,
+                    Name: name,
+                    IsAdmin: isAdmin ? 1 : 0,
+                };
+                const response = await fetch(`http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${user.UserID}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
+                    },
+                    body: JSON.stringify(updatedUser),
+                });
 
-            const data = await response.json();
-            console.log('User updated:', data);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Error when update the user: ${errorData.message || response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('User updated:', data);
+            }
+            
 
         } catch (error) {
             console.error('Error:', error);
@@ -62,15 +90,6 @@ const UserEditPopup = ({ open, user, onClose }) => {
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Edit the user : {user.Name}</DialogTitle>
             <DialogContent className="textFieldManageContainer">
-                <TextField
-                    margin="dense"
-                    label="Username"
-                    type="text"
-                    name="Username"
-                    defaultValue={user.UserName}
-                    required
-                    onChange={(e) => setUsername(e.target.value)}
-                />
 
                 <TextField
                     margin="dense"
@@ -91,16 +110,17 @@ const UserEditPopup = ({ open, user, onClose }) => {
                     onChange={(e) => setEmail(e.target.value)}
                 />
 
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={isAdmin}
-                            onChange={(e) => setIsAdmin(e.target.checked)}
-                        />
-                    }
-                    label={"IsAdmin"}
-                />
-                
+                {user.UserName &&
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={isAdmin}
+                                onChange={(e) => setIsAdmin(e.target.checked)}
+                            />
+                        }
+                        label={"IsAdmin"}
+                    />
+                }
                 
             </DialogContent>
             <div style={{display:'flex', justifyContent: 'space-between'}}>

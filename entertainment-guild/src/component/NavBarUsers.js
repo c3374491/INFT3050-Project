@@ -4,10 +4,7 @@ import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/materi
 import cartIcon from "../assets/images/cart-icon.png"
 import searchIcon from "../assets/images/searchIcon.png"
 import HandleCookies from '../helpers/HandleCookies';
-
-
-
-	
+import logo from '../assets/images/Logo.png';
 
 const NavBarUsers = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -25,13 +22,11 @@ const NavBarUsers = () => {
         <AppBar position="sticky" sx={{ bgcolor: "#5b7569" }} >
             <Toolbar>
                 <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center' }}>
-                    {/* Logo with link */}
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <NavLink to="/" style={{ textDecoration: 'none', color: 'white' }}>
-                            Logo
+                    <Typography sx={{ flexGrow: 1 }}>
+                        <NavLink to="/">
+                            <img src={logo} alt="Logo" style={{ height: '80px' }} />
                         </NavLink>
                     </Typography>
-
                     {/* Search bar */}
                     <Box sx={{ flexGrow: 1}}>
                         <TextField

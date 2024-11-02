@@ -28,7 +28,8 @@ const ManageUsers = () => {
             />
         </div>
       {/* Display list of Users or a message if no Users are available */}
-      <ShowUsers apiUrl="http://localhost:8080/api/v1/db/data/v1/inft3050/User?limit=1000"
+      <ShowUsers apiUrl1="http://localhost:8080/api/v1/db/data/v1/inft3050/User?limit=1000"
+                 apiUrl2="http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons?limit=1000"
             searchTerm={searchTerm}/>
         <h2>Add a new user</h2>
         <AddUserForm/>

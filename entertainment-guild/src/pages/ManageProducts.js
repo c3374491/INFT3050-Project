@@ -14,7 +14,7 @@ const ManageProducts = () => {
     setSearchTerm(event.target.value);
   };
 
-  return (
+    return (
       <div>
         <h1>Manage products</h1>
         <div className="containerTextField">
@@ -32,7 +32,7 @@ const ManageProducts = () => {
                    searchTerm={searchTerm}/>
         <h2>Add a new product</h2>
         <AddProductForm/>
-
+        
       </div>
   );
 };

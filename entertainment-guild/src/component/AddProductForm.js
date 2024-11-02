@@ -41,17 +41,37 @@ const AddProductForm = ({ }) => {
     };
 
     try {
-      // Send POST request to add the new product
-      await axios.post(
-        "http://localhost:8080/api/v1/db/data/v1/inft3050/Product",
-        productToPost,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ", // Auth token for API
-          },
+        // Send POST request to add the new product
+        const productResponse = await axios.post(
+            "http://localhost:8080/api/v1/db/data/v1/inft3050/Product",
+            productToPost,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+                },
+            }
+        );
+        const newProductId = productResponse.data.ID;
+
+        const stocktakeToPost = {
+            SourceId : source,
+            ProductId : newProductId,
+            Quantity : quantity,
+            Price : price,
         }
-      );
+        
+        // Send POST request to add the new stocktake
+        const stocktakeResponse = await axios.post(
+            "http://localhost:8080/api/v1/db/data/v1/inft3050/Stocktake",
+            stocktakeToPost,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+                },
+            }
+        );
       handleOpenSnackbar();
     } catch (error) {
       setPostError(error); // Set error state to display error message

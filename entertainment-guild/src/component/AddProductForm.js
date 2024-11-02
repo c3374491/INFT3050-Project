@@ -1,12 +1,9 @@
-// AddProductForm.js
-// Author: Liam Kimberley || C3375248 
-// Last Updated: 14/9/2024
-
 import React, { useState } from "react";
 import axios from "axios";
 import {FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import HandleCookies from "../helpers/HandleCookies";
 import subGenres from "../data/subGenres";
+import sources from "../data/source"
 import DatePicker from "react-datepicker";
 
 const AddProductForm = ({ }) => {
@@ -18,6 +15,9 @@ const AddProductForm = ({ }) => {
     const [published, setPublished] = useState(null);
     const [postError, setPostError] = useState(null); // State to track any errors during product addition
     const [subGenre, setSubGenre] = useState(null);
+    const [quantity, setQuantity] = useState(null);
+    const [price, setPrice] = useState(null);
+    const [source, setSource] = useState('');
 
     const { authToken } = HandleCookies();
     
@@ -26,6 +26,7 @@ const AddProductForm = ({ }) => {
     // Handles form submission for adding the new product
   const handleSubmit = async (e) => {
     e.preventDefault(); 
+    console.log(source);
     
     // Prepare the product data for POST request
     const productToPost = {
@@ -84,7 +85,7 @@ const AddProductForm = ({ }) => {
 
               <FormControl
                   margin="dense"
-                  className="addProductSelectForm"
+                  className="addProductForm"
                   required>
                   <InputLabel id="genre-number-label">Genre</InputLabel>
                   <Select
@@ -99,7 +100,7 @@ const AddProductForm = ({ }) => {
               </FormControl>
 
               <FormControl margin="dense"
-                           className="addProductSelectForm"
+                           className="addProductForm"
                             required >
                   <InputLabel id="subgenre-label">SubGenre</InputLabel>
                   <Select
@@ -120,9 +121,46 @@ const AddProductForm = ({ }) => {
                   selected={published}
                   onChange={setPublished}
                   className="datePicker"
-                  placeholderText="Select a date"
+                  placeholderText="Published on"
                   required
               />
+
+              <TextField
+                  margin="dense"
+                  label="Quantity"
+                  type="number"
+                  name="Quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  required
+                  className="addProductForm"
+              />
+
+              <TextField
+                  margin="dense"
+                  label="Price"
+                  type="number"
+                  name="Price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                  className="addProductForm"
+              />
+
+              <FormControl margin="dense" className="addProductForm" required>
+                  <InputLabel id="source-label">Source</InputLabel>
+                  <Select
+                      labelId="source-label"
+                      value={source}
+                      onChange={(e) => setSource(e.target.value)}
+                  >
+                      {sources.list.map((source) => (
+                          <MenuItem key={source.Sourceid} value={source.Sourceid}>
+                              {source.SourceName}
+                          </MenuItem>
+                      ))}
+                  </Select>
+              </FormControl>
           </div>
               <TextField
                   margin="dense"

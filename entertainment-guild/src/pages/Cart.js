@@ -29,27 +29,33 @@ const Cart = () => {
     const fetchProducts = async (ids) => {
         const apiUrl = 'http://localhost:8080/api/v1/db/data/v1/inft3050/Product?limit=1000';
         try {
-            const response = await axios.get(apiUrl, {
+            const productResponse = await axios.get(apiUrl, {
                 headers: {
                     'Accept': 'application/json',
                     'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
-                },
-                params: { ids: ids.join(',') }
+                }
+            });
+            console.log(productResponse.data.list);
+
+            const stocktakeResponse = await axios.get("http://localhost:8080/api/v1/db/data/v1/inft3050/Stocktake?limit=1000",{
+                headers: {
+                    'Accept': 'application/json',
+                    'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
+                }
             });
 
-            if (Array.isArray(response.data.list)) {
+            const productsList = productResponse.data.list.filter(product => ids.includes(product.ID));
+            const stocktakeList = stocktakeResponse.data.list;
 
-                // Filter the products
-                const filteredProducts = response.data.list.filter(product =>
-                    ids.includes(product.ID)
-                );
-
-                console.log("Filtered Products:", filteredProducts);
-                setProducts(filteredProducts);
-            } else {
-                console.warn('Expected array but got:', response.data.list);
-                setProducts([]);
-            }
+            // Merge prices into products
+            const productsWithPrices = productsList.map(product => {
+                const stockItem = stocktakeList.find(item => item.ProductId === product.ID);
+                return {
+                    ...product,
+                    Price: stockItem ? stockItem.Price : null, // Assign price if available
+                };
+            });
+            setProducts(productsWithPrices)
         } catch (error) {
             console.error('Error fetching products:', error);
         }

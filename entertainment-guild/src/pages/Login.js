@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import HandleCookies from '../helpers/HandleCookies';
 import { useNavigate } from 'react-router-dom';
 import ForgotPasswordPopup from "../component/ForgotPasswordPopup";
+import Snackbar from "@mui/material/Snackbar";
 
 
 const Login = () => {
@@ -15,8 +16,9 @@ const Login = () => {
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [result, setResult] = useState(null); // null indicates no attempt, true for success, false for failure
+	const [result, setResult] = useState(null);
 	const [showForgotPasswordPopup, setShowForgotPasswordPopup] = useState(false);
+	const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
 	async function handleSubmit(event) {
 		event.preventDefault(); //Prevent reloading of the page
@@ -35,7 +37,15 @@ const Login = () => {
 		}
 	}
 
+	const handlePasswordChangeSuccess = () => {
+		setIsSnackBarOpen(true);
+		setShowForgotPasswordPopup(false);
+	};
 
+	const handleCloseSnackbar = () => {
+		setIsSnackBarOpen(false);
+	};
+	
 	const handleUsernameChange = (event) => {
 		setUsername(event.target.value);
 	}
@@ -81,7 +91,15 @@ const Login = () => {
 				</Link>
 				<p>Don't have an account? <Link to="/signup">Sign up!</Link></p>
 			</Box >
-			{showForgotPasswordPopup && <ForgotPasswordPopup open={showForgotPasswordPopup} onClose={handleCloseForgotPasswordPopup} />}
+			{showForgotPasswordPopup && <ForgotPasswordPopup open={showForgotPasswordPopup} onClose={handleCloseForgotPasswordPopup}
+															 onPasswordChangeSuccess={handlePasswordChangeSuccess}/>}
+			<Snackbar
+				open={isSnackBarOpen}
+				autoHideDuration={3000}
+				onClose={handleCloseSnackbar}
+				message="Password changed successfully!"
+				anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+			/>
 		</Box >
 	);
 }

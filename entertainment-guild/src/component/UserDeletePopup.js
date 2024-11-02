@@ -13,10 +13,11 @@ const UserDeletePopup = ({ user, open, onClose }) => {
         console.log(user.UserName);
         let isUser = 0;
         try {
-            if (user.UserName !== undefined)
+            let response = [];
+            if (user.UserName)
             {
-                // Step 1: Get the user's product list
-                const response = await axios.get(
+                // Get the user's product list
+                response = await axios.get(
                     `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
                     {
                         headers: {
@@ -31,34 +32,44 @@ const UserDeletePopup = ({ user, open, onClose }) => {
             console.log(isUser)
             // Check if the user has products
             if (isUser) {
-                console.log("User has products");
-                // Create the update object with the required fields
-                const updatedUser = {
-                    Email: null,
-                    Name: null,
-                    Salt: null,
-                    HashPW: null,
-                    IsAdmin: 1,
-                };
-                
-                // Use axios to PATCH the user
-                const updateResponse = await axios.patch(
-                    `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
-                    updatedUser,
-                    {
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
-                        },
-                    }
-                );
+                if (response.data.list && response.data.list.length > 0) {
+                    console.log("User has products");
+                    // Create the update object with the required fields
+                    const updatedUser = {
+                        Email: null,
+                        Name: null,
+                        Salt: null,
+                        HashPW: null,
+                        IsAdmin: 0,
+                    };
 
-                console.log('User updated:', updateResponse.data);
+                    // Use axios to PATCH the user
+                    await axios.patch(
+                        `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
+                        updatedUser,
+                        {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
+                            },
+                        }
+                    );
+
+                } else {
+                    await axios.delete(
+                        `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+                            },
+                        }
+                    );
+                }
+                
             } else {
-                console.log("user :")
-                console.log(user)
-                // Step 3: Delete the user if they have no products
+                // Delete the user if they have no products
                 await axios.delete(
                     `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${user.UserID}`,
                     {

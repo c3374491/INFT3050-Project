@@ -8,19 +8,19 @@ import {FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/materia
 import HandleCookies from "../helpers/HandleCookies";
 import subGenres from "../data/subGenres";
 import DatePicker from "react-datepicker";
+import Snackbar from "@mui/material/Snackbar";
 
 const AddProductForm = ({ }) => {
     const [name, setName] = useState("");
     const [author, setAuthor] = useState("");
     const [description, setDescription] = useState("");
     const [genre, setGenre] = useState(null);
-    const [subgenre, setSubgenre] = useState(null);
     const [published, setPublished] = useState(null);
     const [postError, setPostError] = useState(null); // State to track any errors during product addition
     const [subGenre, setSubGenre] = useState(null);
+    const [isSnackBarOpen, setSnackBarOpen] = useState(false);
 
     const { authToken } = HandleCookies();
-    
 
 
     // Handles form submission for adding the new product
@@ -51,11 +51,25 @@ const AddProductForm = ({ }) => {
           },
         }
       );
-      window.location.reload();
+      handleOpenSnackbar();
     } catch (error) {
       setPostError(error); // Set error state to display error message
     }
   };
+
+    // https://mui.com/material-ui/react-snackbar/
+    // Function to open the snackbar and set the selected product
+    const handleOpenSnackbar = () => {
+        setSnackBarOpen(true);
+    }
+
+    // Function to close the snackbar and reset the cart product
+    const handleCloseSnackbar = () => {
+        setSnackBarOpen(false);
+
+        window.location.reload();
+    }
+    
   {/* Form to input data for the new product */}
   return (
       <form onSubmit={handleSubmit}>
@@ -150,6 +164,16 @@ const AddProductForm = ({ }) => {
                       {postError}
                   </div>
               )}
+
+          {/* Display a snackbar if a user add a product to cart
+            Automaticallyb hidding after 3000ms, pop in the top right of the screen */}
+          <Snackbar
+              open={isSnackBarOpen}
+              autoHideDuration={3000}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}  // Set position to top-right
+              message={`You created a new product : ${name}`}
+              onClose={handleCloseSnackbar}
+          />
       </form>
 );
 };

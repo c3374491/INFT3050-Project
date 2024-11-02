@@ -10,6 +10,7 @@ import gameIcon from "../assets/images/game_icon.png";
 import {format} from "date-fns";
 import ProductEditPopup from "./ProductEditPopup";
 import ProductDeletePopup from "./ProductDeletePopup";
+import Snackbar from "@mui/material/Snackbar";
 
 // ShowProduct component to display a list of the products
 // apiUrl: string containing the URL to fetch the products data
@@ -171,6 +172,7 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
                     onClose={handleClosePopupDelete}
                 />
             )}
+
         </div>
     );
 };

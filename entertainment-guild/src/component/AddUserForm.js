@@ -3,6 +3,7 @@ import axios from "axios";
 import { TextField } from "@mui/material";
 import {sha256} from "../helpers/HandleLogin";
 import "../style.css";
+import Snackbar from "@mui/material/Snackbar";
 
 const AddUserForm = () => {
   const [name, setName] = useState("");
@@ -17,6 +18,7 @@ const AddUserForm = () => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null); // Error state for existing password
   const [isEmploye, setIsEmploye] = useState(null);
+  const [isSnackBarOpen, setSnackBarOpen] = useState(false);
 
   // Fetch users from the API
   useEffect(() => {
@@ -114,12 +116,25 @@ const AddUserForm = () => {
               },
             }
         );
-        window.location.reload();
+        handleOpenSnackbar();
       }
     } catch (error) {
       console.error("Error response:", error.response ? error.response.data : error.message);
     }
   };
+
+  // https://mui.com/material-ui/react-snackbar/
+  // Function to open the snackbar and set the selected product
+  const handleOpenSnackbar = () => {
+    setSnackBarOpen(true);
+  }
+
+  // Function to close the snackbar and reset the cart product
+  const handleCloseSnackbar = () => {
+    setSnackBarOpen(false);
+
+    window.location.reload();
+  }
 
 
   return (
@@ -203,8 +218,17 @@ const AddUserForm = () => {
                 {postError}
               </div>
           )}
-        
+        {/* Display a snackbar if a user add a product to cart
+            Automaticallyb hidding after 3000ms, pop in the top right of the screen */}
+        <Snackbar
+            open={isSnackBarOpen}
+            autoHideDuration={3000}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}  // Set position to top-right
+            message={`You created a new user : ${name}`}
+            onClose={handleCloseSnackbar}
+        />
       </form>
+      
 
 )
   ;

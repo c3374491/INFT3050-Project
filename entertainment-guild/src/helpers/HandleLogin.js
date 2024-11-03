@@ -147,7 +147,7 @@ const processLogin = async (username, password, token) => {
 			if (TOListData) {
 				var phoneNumber = TOListData.PhoneNumber;
 				var CVV = TOListData.CVV;
-				var streetAddress = TOListData.StreetAddres;
+				var streetAddress = TOListData.StreetAddress;
 				var postCode = TOListData.PostCode;
 				var suburb = TOListData.Suburb;
 				var state = TOListData.State;
@@ -175,6 +175,8 @@ const processLogin = async (username, password, token) => {
 			return {
 				token,
 				userInfo: {
+					userID: user.UserID,
+					customerID: customerNumber,
 					name: user.Name,
 					email: user.Email,
 					salt: user.Salt, // Include salt for future operations

@@ -28,6 +28,7 @@ import ManageStockGames from "./pages/ManageStockGames";
 import EmployeRoute from "./component/EmployeRoute";
 import EmployeShowUsers from "./pages/EmployeShowUsers";
 import SeeOrdersEmploye from "./pages/SeeOrdersEmploye";
+import OrderCompletion from './pages/OrderCompletion.js';
 
 
 const App = () => {
@@ -52,6 +53,7 @@ const App = () => {
 				<Route path="/checkout" element={<Checkout />} />
 				<Route path="/productlistsearch" element={<ProductListSearch />} />
 				<Route path="/manageaccount" element={<ManageAccount />} />
+				<Route path="/ordercompletion" element={<OrderCompletion />} />
 
 				{/* Protect the admin routes */}
 				<Route path="/admin/management" element={<AdminRoute><Management /></AdminRoute>} />

@@ -11,7 +11,7 @@ import Snackbar from "@mui/material/Snackbar";
 const Login = () => {
 
 	const navigate = useNavigate();
-	
+
 	const { setAuthToken, authToken, clearAuthToken } = HandleCookies();
 
 	const [username, setUsername] = useState("");
@@ -56,8 +56,8 @@ const Login = () => {
 
 	const handleForgotPasswordClick = () =>
 		setShowForgotPasswordPopup(true);
-		
-	const handleCloseForgotPasswordPopup = () => 
+
+	const handleCloseForgotPasswordPopup = () =>
 		setShowForgotPasswordPopup(false);
 
 

@@ -77,7 +77,7 @@ const Cart = () => {
         <div>
             <Box display="flex" justifyContent="center">
                 <Box>
-					{authToken.isAdmin && (<div><br /> <Alert severity="error">CAUTION: You are logged in as an Admin!</Alert></div>)}
+					{authToken && authToken.isAdmin && (<div><br /> <Alert severity="error">CAUTION: You are logged in as an Admin!</Alert></div>)}
                     <h1>Your Cart</h1>
                     {/* Show products in the cart */}
                     <CartProductList productList={products}/>

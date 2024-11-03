@@ -32,21 +32,23 @@ const processLogin = async (username, password, token) => {
 	const adminUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${username}`;
 	const adminData = await fetchData(adminUrl, token);
 
-    // If admin/employee data exists, compare the hashed password with the stored hash
-    if (adminData && await sha256(adminData.Salt + password) === adminData.HashPW) {
-        console.log("Admin/Employee login successful");
-        // Return a token and user info if login is successful
-        return {
-            token,
-            userInfo: {
-                username: adminData.UserName,
-                name: adminData.Name,
-                email: adminData.Email,
-                isAdmin: adminData.IsAdmin,
-            },
-        };
-    }
 
+	// If admin/employee data exists, compare the hashed password with the stored hash
+	if (adminData && await sha256(adminData.Salt + password) === adminData.HashPW) {
+		console.log("Admin/Employee login successful");
+		// Return a token and user info if login is successful
+		return {
+			token,
+			userInfo: {
+				username: adminData.UserName,
+				name: adminData.Name,
+				email: adminData.Email,
+				isAdmin: adminData.IsAdmin,
+				isEmploye: adminData.IsEmploye
+			},
+		};
+	}
+	
 	// Regular User Login Attempt
 	// If admin/employee login fails, attempt to log in as a regular user using the email as the identifier.
 	const userUrl = `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons?where=(Email,eq,${username})`;

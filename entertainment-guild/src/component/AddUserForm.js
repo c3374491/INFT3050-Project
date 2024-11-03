@@ -24,17 +24,29 @@ const AddUserForm = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/User`, {
+        const userResponse = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/User`, {
           headers: {
             Accept: "application/json",
             "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
           },
         });
 
-        if (Array.isArray(response.data.list)) {
-          setUsers(response.data.list);
+        const patronsResponse = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons`, {
+          headers: {
+            Accept: "application/json",
+            "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+          },
+        });
+
+        const users = [
+          ...(userResponse.data.list || []),   
+          ...(patronsResponse.data.list || []), 
+        ];
+
+        if (Array.isArray(users)) {
+          setUsers(users);
         } else {
-          console.warn("Expected array but got:", response.data.list);
+          console.warn("Expected array but got:", users);
           setUsers([]);
         }
       } catch (error) {

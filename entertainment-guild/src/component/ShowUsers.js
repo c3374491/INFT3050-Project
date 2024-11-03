@@ -10,13 +10,14 @@ import AddUserForm from "./AddUserForm";
 
 // ShowUsers component to display a list of the users
 // apiUrl: string containing the URL to fetch the products data
-const ShowUsers = ({ apiUrl, searchTerm}) => {
+const ShowUsers = ({ apiUrl1,apiUrl2, searchTerm}) => {
     const [users, setUsers] = useState([]);
     const [selectedUserEdit, setSelectedUserEdit] = useState(null);
     const [selectedUserDelete, setSelectedUserDelete] = useState(null);
     const [error, setError] = useState(null);
     const [isOpenEdit, setOpenEdit] = useState(false);
     const [isOpenDelete, setOpenDelete] = useState(false);
+    const [onlyAdminEmploye, setOnlyAdminEmploye] = useState(null);
 
     
     // Get handleOpenPopup and handleClosePopup functions from https://mui.com/material-ui/react-dialog/
@@ -47,19 +48,38 @@ const ShowUsers = ({ apiUrl, searchTerm}) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(apiUrl, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
-                    }
-                });
-                
-                if (Array.isArray(response.data.list)) {
-                    setUsers(response.data.list);
-                } else {
-                    console.warn('Expected array but got:', response.data.list);
-                    setUsers([]);
-                }
+                const [response1, response2] = await Promise.all([
+                    axios.get(apiUrl1, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
+                        }
+                    }),
+                    axios.get(apiUrl2, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
+                        }
+                    })
+                ]);
+
+                // Combine the lists from both responses
+                const combinedUsers = [
+                    ...response1.data.list.map(user => ({
+                        ...user,
+                        IsAdmin: user.IsAdmin, 
+                        IsEmployee: !user.IsAdmin
+                    })),
+                    ...response2.data.list.map(user => ({
+                        ...user,
+                        IsAdmin: false, 
+                        IsEmployee: false
+                    }))
+                ];
+
+                // Filter out null names and update the state
+                const filteredUsers = combinedUsers.filter(user => user.Name !== null);
+                setUsers(filteredUsers);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setError(error);
@@ -67,14 +87,14 @@ const ShowUsers = ({ apiUrl, searchTerm}) => {
         };
 
         fetchUsers();
-    }, [apiUrl]);
+    }, [apiUrl1, apiUrl2]);
 
     const filteredUsers = users
         .filter(user => user.Name !== null)
         .filter(user =>
-            user.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.UserName.toLowerCase().includes(searchTerm.toLowerCase() || 
-            user.Email.toLowerCase().includes(searchTerm.toLowerCase())
+            user.Name && user.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.UserName && user.UserName.toLowerCase().includes(searchTerm.toLowerCase() || 
+            user.Email && user.Email.toLowerCase().includes(searchTerm.toLowerCase())
             ));
 
     // Display the list of users
@@ -89,6 +109,7 @@ const ShowUsers = ({ apiUrl, searchTerm}) => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Admin</th>
+                        <th>Employe</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -101,8 +122,9 @@ const ShowUsers = ({ apiUrl, searchTerm}) => {
                             <td>{user.Name}</td>
                             <td>{user.Email ? user.Email : "No Email"}</td>
                             <td>{user.IsAdmin ? "Yes" : "No"}</td>
+                            <td>{user.IsEmployee ? "Yes" : "No"}</td>
                             <td>
-                                <button onClick={() => handleOpenPopup(user)} className="editButton">
+                            <button onClick={() => handleOpenPopup(user)} className="editButton">
                                     <img src={editIcon} alt="Edit Button Icon" className="editImage"/>
                                 </button>
                                 <button onClick={() => handleDeleteUser(user)} className="deleteButton">

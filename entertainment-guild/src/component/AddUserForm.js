@@ -3,6 +3,7 @@ import axios from "axios";
 import { TextField } from "@mui/material";
 import {sha256} from "../helpers/HandleLogin";
 import "../style.css";
+import Snackbar from "@mui/material/Snackbar";
 
 const AddUserForm = () => {
   const [name, setName] = useState("");
@@ -16,22 +17,36 @@ const AddUserForm = () => {
   const [error, setError] = useState(""); // State to store any fetch error
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null); // Error state for existing password
+  const [isEmploye, setIsEmploye] = useState(null);
+  const [isSnackBarOpen, setSnackBarOpen] = useState(false);
 
   // Fetch users from the API
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/User`, {
+        const userResponse = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/User`, {
           headers: {
             Accept: "application/json",
             "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
           },
         });
 
-        if (Array.isArray(response.data.list)) {
-          setUsers(response.data.list);
+        const patronsResponse = await axios.get(`http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons`, {
+          headers: {
+            Accept: "application/json",
+            "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+          },
+        });
+
+        const users = [
+          ...(userResponse.data.list || []),   
+          ...(patronsResponse.data.list || []), 
+        ];
+
+        if (Array.isArray(users)) {
+          setUsers(users);
         } else {
-          console.warn("Expected array but got:", response.data.list);
+          console.warn("Expected array but got:", users);
           setUsers([]);
         }
       } catch (error) {
@@ -87,22 +102,51 @@ const AddUserForm = () => {
     
 
     try {
-      // Send POST request to add the new user
-      await axios.post(
-          "http://localhost:8080/api/v1/db/data/v1/inft3050/User",
-          userToPost,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
-            },
-          }
-      );
-      window.location.reload();
+      if (isAdmin || isEmploye) {
+        // Send POST request to add the new user
+        await axios.post(
+            "http://localhost:8080/api/v1/db/data/v1/inft3050/User",
+            userToPost,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+              },
+            }
+        );
+        window.location.reload();
+      }
+      else {
+        // Send POST request to add the new user
+        await axios.post(
+            "http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons",
+            userToPost,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+              },
+            }
+        );
+        handleOpenSnackbar();
+      }
     } catch (error) {
       console.error("Error response:", error.response ? error.response.data : error.message);
     }
   };
+
+  // https://mui.com/material-ui/react-snackbar/
+  // Function to open the snackbar and set the selected product
+  const handleOpenSnackbar = () => {
+    setSnackBarOpen(true);
+  }
+
+  // Function to close the snackbar and reset the cart product
+  const handleCloseSnackbar = () => {
+    setSnackBarOpen(false);
+
+    window.location.reload();
+  }
 
 
   return (
@@ -156,12 +200,21 @@ const AddUserForm = () => {
               className="addUserForm"
           />
           <label>
-            Is Admin: 
+            Is Admin:
             <input
                 type="checkbox"
                 name="IsAdmin"
                 checked={isAdmin}
                 onChange={(e) => setIsAdmin(e.target.checked)}
+            />
+          </label>
+          <label>
+            Is Employe:
+            <input
+                type="checkbox"
+                name="IsEmploye"
+                checked={isEmploye}
+                onChange={(e) => setIsEmploye(e.target.checked)}
             />
           </label>
         </div>
@@ -170,15 +223,24 @@ const AddUserForm = () => {
             <strong>Add user</strong>
           </button>
         </div>
-          {/* Display submission errors with a custom message */}
+        {/* Display submission errors with a custom message */}
           {postError && (
               <div style={{color: "red", marginTop: "10px"}}>
                 <strong>Error: </strong>
                 {postError}
               </div>
           )}
-        
+        {/* Display a snackbar if a user add a product to cart
+            Automaticallyb hidding after 3000ms, pop in the top right of the screen */}
+        <Snackbar
+            open={isSnackBarOpen}
+            autoHideDuration={3000}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}  // Set position to top-right
+            message={`You created a new user : ${name}`}
+            onClose={handleCloseSnackbar}
+        />
       </form>
+      
 
 )
   ;

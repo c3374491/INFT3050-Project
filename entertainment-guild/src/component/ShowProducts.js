@@ -4,13 +4,13 @@ import "../style.css";
 import "../helpers/HandleCookies"
 import editIcon from "../assets/images/edit_icon.png";
 import deleteIcon from "../assets/images/delete-icon.png";
-import UserDeletePopup from "./UserDeletePopup";
 import bookIcon from "../assets/images/book_icon.png";
 import movieIcon from "../assets/images/movie_icon.png";
 import gameIcon from "../assets/images/game_icon.png";
 import {format} from "date-fns";
 import ProductEditPopup from "./ProductEditPopup";
 import ProductDeletePopup from "./ProductDeletePopup";
+import Snackbar from "@mui/material/Snackbar";
 
 // ShowProduct component to display a list of the products
 // apiUrl: string containing the URL to fetch the products data
@@ -36,7 +36,7 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
         setOpenEdit(false);
     };
 
-    const handleDeleteUser = (product) => {
+    const handleDeleteProduct = (product) => {
         setSelectedProductDelete(product);
         setOpenDelete(true);
     }
@@ -89,7 +89,7 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
         });
 
 
-    // Display the list of users
+    // Display the list of products
     return (
         <div>
             <div className="userTableWrap">
@@ -143,7 +143,7 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
                                     <button onClick={() => handleOpenPopup(product)} className="editButton">
                                         <img src={editIcon} alt="Edit Button Icon" className="editImage"/>
                                     </button>
-                                    <button onClick={() => handleDeleteUser(product)} className="deleteButton">
+                                    <button onClick={() => handleDeleteProduct(product)} className="deleteButton">
                                         <img src={deleteIcon} alt="Delete Button Icon" className="deleteImage"/>
                                     </button>
                                 </td>
@@ -152,7 +152,7 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
                         </tbody>
                     </table>
                 ) : (
-                    <p>No users available.</p>
+                    <p>No products available.</p>
                 )}
             </div>
             {error && <p>Error: {error.message}</p>}
@@ -172,6 +172,7 @@ const ShowProducts = ({ apiUrl, searchTerm}) => {
                     onClose={handleClosePopupDelete}
                 />
             )}
+
         </div>
     );
 };

@@ -10,50 +10,69 @@ const UserDeletePopup = ({ user, open, onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(user);
-
+        console.log(user.UserName);
+        let isUser = 0;
         try {
-            const response = await axios.get(
-                `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
-                    },
-                }
-            );
-
-            console.log("Response Data:", response.data); // Log the response
-
-            // Check if the user has products
-            if (response.data.productList.length > 0) {
-                console.log("User has products");
-
-                // Create the update object with the required fields
-                const updatedUser = {
-                    Email: null,
-                    Name: null,
-                    Salt: null,
-                    HashPW: null,
-                    IsAdmin: 1,
-                };
-
-                console.log(updatedUser);
-                const updateResponse = await axios.patch(
+            let response = [];
+            if (user.UserName)
+            {
+                // Get the user's product list
+                response = await axios.get(
                     `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
-                    updatedUser,
                     {
                         headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
+                            "Content-Type": "application/json",
+                            "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
                         },
                     }
                 );
+                isUser = 1;
+                console.log("Response Data:", response.data); // Log the response
+            }
+            console.log(isUser)
+            // Check if the user has products
+            if (isUser) {
+                if (response.data.list && response.data.list.length > 0) {
+                    console.log("User has products");
+                    // Create the update object with the required fields
+                    const updatedUser = {
+                        Email: null,
+                        Name: null,
+                        Salt: null,
+                        HashPW: null,
+                        IsAdmin: 0,
+                    };
 
-                console.log('User updated:', updateResponse.data);
+                    // Use axios to PATCH the user
+                    await axios.patch(
+                        `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
+                        updatedUser,
+                        {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ',
+                            },
+                        }
+                    );
+
+                } else {
+                    await axios.delete(
+                        `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "xc-token": "sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ",
+                            },
+                        }
+                    );
+                }
+                
             } else {
+                // Delete the user if they have no products
+
                 await axios.delete(
-                    `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
+                    `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${user.UserID}`,
                     {
                         headers: {
                             "Content-Type": "application/json",
@@ -64,7 +83,7 @@ const UserDeletePopup = ({ user, open, onClose }) => {
             }
 
             onClose();
-            //window.location.reload();
+            window.location.reload();
         } catch (error) {
             if (error.response) {
                 console.error("Error response data:", error.response.data); // Log the server response

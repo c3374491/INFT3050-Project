@@ -34,31 +34,41 @@ const RandomProduct = ({ genre }) => {
     const fetchProducts = async (genre) => {
         const apiUrl = 'http://localhost:8080/api/v1/db/data/v1/inft3050/Product?limit=1000';
         try {
-            const response = await axios.get(apiUrl, {
+            const productResponse = await axios.get(apiUrl, {
+                headers: {
+                    'Accept': 'application/json',
+                    'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
+                }
+            });
+            console.log(productResponse.data.list);
+
+            const stocktakeResponse = await axios.get("http://localhost:8080/api/v1/db/data/v1/inft3050/Stocktake?limit=1000",{
                 headers: {
                     'Accept': 'application/json',
                     'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
                 }
             });
 
-            if (Array.isArray(response.data.list)) {
-                // Filter the products based on genre
-                const filteredProducts = response.data.list.filter(product =>
-                    product.Genre === genre // Assurez-vous que le champ 'Genre' est correct
-                );
+            const productsList = productResponse.data.list.filter(item => item.Genre === genre);
+            const stocktakeList = stocktakeResponse.data.list;
 
-                if (filteredProducts.length > 0) {
+            // Merge prices into products
+            const productsWithPrices = productsList.map(product => {
+                const stockItem = stocktakeList.find(item => item.ProductId === product.ID);
+                return {
+                    ...product,
+                    Price: stockItem ? stockItem.Price : null, // Assign price if available
+                };
+            });
+
+                if (productsWithPrices.length > 0) {
                     // Select a random product from the filtered list
-                    const randomProduct = filteredProducts[Math.floor(Math.random() * filteredProducts.length)];
+                    const randomProduct = productsWithPrices[Math.floor(Math.random() * productsWithPrices.length)];
                     setProduct([randomProduct]); // Set it as a single product in an array
                 } else {
                     console.warn('No products found for the specified genre.');
                     setProduct([]);
                 }
-            } else {
-                console.warn('Expected array but got:', response.data.list);
-                setProduct([]);
-            }
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -98,20 +108,23 @@ const RandomProduct = ({ genre }) => {
                         <div className="productInfoVertical">
                             <strong>{product.Name}</strong>
                         </div>
-                        <p className="productDescription">
-                            {product.Description}
-                        </p>
-                        <div className="productAction">
-                            <button onClick={() => handleOpenPopup(product)} className="productCart">
-                                <img src={informationIcon} alt="Info Button Icon" className="productCartImage"/>
-                            </button>
-                            <button onClick={() => addToCart(product)} className="productCart">
-                                <img src={addToCartIcon} alt="Add to car Button Icon" className="productCartImage"/>
-                            </button>
+                        <div className="priceProduct">
+                            ${product.Price}
                         </div>
+                            <p className="productDescription">
+                                {product.Description}
+                            </p>
+                            <div className="productAction">
+                                <button onClick={() => handleOpenPopup(product)} className="productCart">
+                                    <img src={informationIcon} alt="Info Button Icon" className="productCartImage"/>
+                                </button>
+                                <button onClick={() => addToCart(product)} className="productCart">
+                                    <img src={addToCartIcon} alt="Add to car Button Icon" className="productCartImage"/>
+                                </button>
+                            </div>
                     </li>
                 ))
-            ) : (
+                ) : (
                 <Typography variant="body1">No products found for the selected genre.</Typography>
             )}
             {/* Display the popup dialog with more details */}

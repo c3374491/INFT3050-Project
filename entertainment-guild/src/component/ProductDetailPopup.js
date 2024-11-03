@@ -40,6 +40,7 @@ const ProductDetailsPopup = ({ open, product, onClose,showAddToCart=true }) => {
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>{product.Name}</DialogTitle>
             <DialogContent>
+                <Typography><strong>Price</strong> : ${product.Price}</Typography>
                 <Typography><strong>by</strong> {product.Author}</Typography>
                 <Typography>{product.Description}</Typography>
                 {product.Published && (

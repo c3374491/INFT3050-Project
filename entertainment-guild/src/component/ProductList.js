@@ -26,21 +26,34 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength, orientation
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get(apiUrl, {
+                const productResponse = await axios.get(apiUrl, {
                     headers: {
                         'Accept': 'application/json',
                         'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
                     }
                 });
-                console.log(response.data.list);
+                console.log(productResponse.data.list);
+                
+                const stocktakeResponse = await axios.get("http://localhost:8080/api/v1/db/data/v1/inft3050/Stocktake?limit=1000",{
+                    headers: {
+                        'Accept': 'application/json',
+                        'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ'
+                    }
+                });
 
-                if (Array.isArray(response.data.list)) {
-                    const filteredProducts = response.data.list.filter(item => item.Genre === genre);
-                    setProducts(filteredProducts);
-                } else {
-                    console.warn('Expected array but got:', response.data.list);
-                    setProducts([]);
-                }
+                const productsList = productResponse.data.list.filter(item => item.Genre === genre);
+                const stocktakeList = stocktakeResponse.data.list;
+
+                // Merge prices into products
+                const productsWithPrices = productsList.map(product => {
+                    const stockItem = stocktakeList.find(item => item.ProductId === product.ID);
+                    return {
+                        ...product,
+                        Price: stockItem ? stockItem.Price : null, // Assign price if available
+                    };
+                });
+
+                setProducts(productsWithPrices);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setError(error);
@@ -114,6 +127,7 @@ const ProductList = ({ apiUrl, genre, searchTerm, descriptionLength, orientation
                             <div className={orientation === "horizontal" ? "productInfoHorizontal" : "productInfoVertical"}>
                                 <strong>{product.Name}</strong>
                             </div>
+                            <strong>${product.Price}</strong>
                             <p className="productDescription">
                                 {product.Description.length > descriptionLength
                                     ? `${product.Description.substring(0, descriptionLength)}...`

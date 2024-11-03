@@ -22,6 +22,7 @@ import { CookiesProvider } from 'react-cookie';
 import HandleCookies from './helpers/HandleCookies';
 import Checkout from "./pages/Checkout";
 import AdminRoute from "./component/AdminRoute";
+import OrderCompletion from './pages/OrderCompletion.js';
 
 
 const App = () => {
@@ -44,6 +45,8 @@ const App = () => {
 				<Route path="/productlistsearch" element={<ProductListSearch />} />
 				<Route path="/ManageAccountPassword" element={<ManageAccountPassword />} />
 				<Route path="/ManageAccountDetails" element={<ManageAccountDetails />} />
+				<Route path="/ordercompletion" element={<OrderCompletion />} />
+
 
 				{/* Protect the admin routes */}
 				<Route path="/admin/management" element={<AdminRoute><Management /></AdminRoute>} />

@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
 import HandleCookies from '../helpers/HandleCookies';
+import logo from "../assets/images/Logo.png";
 
 const NavBarAdmin = () => {
 
@@ -12,9 +13,9 @@ const NavBarAdmin = () => {
 			<Toolbar>
 				<Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center' }}>
 					{/* Logo with link */}
-					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						<NavLink to="/" style={{ textDecoration: 'none', color: 'white' }}>
-							Logo
+					<Typography sx={{ flexGrow: 1 }}>
+						<NavLink to="/">
+							<img src={logo} alt="Logo" style={{ height: '80px' }} />
 						</NavLink>
 					</Typography>
 

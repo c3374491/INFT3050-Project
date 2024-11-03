@@ -139,7 +139,7 @@ const ManageAccountDetails = () => {
                     <TextField
                         label="Name"
                         name="name"
-                        defaultValue={authToken.Name}
+                        defaultValue={authToken.name}
                         value={formData.name}
                         onChange={handleInputChange}
                         fullWidth

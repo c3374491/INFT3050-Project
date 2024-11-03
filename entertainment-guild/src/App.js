@@ -21,6 +21,11 @@ import HandleCookies from './helpers/HandleCookies';
 import Checkout from "./pages/Checkout";
 import AdminRoute from "./component/AdminRoute";
 import ManageAccount from "./pages/ManageAccount.js";
+import NavBarEmploye from "./component/NavBarEmploye";
+import ManageStockBooks from "./pages/ManageStockBooks"
+import ManageStockMovies from "./pages/ManageStockMovies";
+import ManageStockGames from "./pages/ManageStockGames";
+import EmployeRoute from "./component/EmployeRoute";
 
 
 const App = () => {
@@ -29,7 +34,10 @@ const App = () => {
 
 	return (
 		<CookiesProvider>
-			{(authToken == null && <NavBarUsers />) || (authToken.isAdmin && (<NavBarAdmin />) || authToken && <NavBarUsers /> )}
+			{(authToken == null && <NavBarUsers />) || 
+				(authToken.isAdmin && (<NavBarAdmin />) || 
+					authToken.isEmploye && <NavBarEmploye /> ||
+					authToken && <NavBarUsers />)}
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/profile" element={<Profile />} />
@@ -47,6 +55,12 @@ const App = () => {
 				<Route path="/admin/management" element={<AdminRoute><Management /></AdminRoute>} />
 				<Route path="/admin/manageusers" element={<AdminRoute><ManageUsers /></AdminRoute>} />
 				<Route path="/admin/manageproducts" element={<AdminRoute><ManageProducts /></AdminRoute>} />
+
+
+				{/* Protect the employe routes */}
+				<Route path="/employe/managestockbooks" element={<EmployeRoute ><ManageStockBooks /></EmployeRoute>} />
+				<Route path="/employe/managestockmovies" element={<EmployeRoute ><ManageStockMovies /></EmployeRoute>} />
+				<Route path="/employe/managestockgames" element={<EmployeRoute ><ManageStockGames /></EmployeRoute>} />
 
 				<Route path="*" element={<ErrorNotFound />} />
 			</Routes>

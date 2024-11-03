@@ -42,6 +42,7 @@ const processLogin = async (username, password, token) => {
 				name: adminData.Name,
 				email: adminData.Email,
 				isAdmin: adminData.IsAdmin,
+				isEmploye: adminData.isEmploye
 			},
 		};
 	}

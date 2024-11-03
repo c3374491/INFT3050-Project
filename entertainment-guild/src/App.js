@@ -26,6 +26,8 @@ import ManageStockBooks from "./pages/ManageStockBooks"
 import ManageStockMovies from "./pages/ManageStockMovies";
 import ManageStockGames from "./pages/ManageStockGames";
 import EmployeRoute from "./component/EmployeRoute";
+import EmployeShowUsers from "./pages/EmployeShowUsers";
+import SeeOrdersEmploye from "./pages/SeeOrdersEmploye";
 
 
 const App = () => {
@@ -61,6 +63,8 @@ const App = () => {
 				<Route path="/employe/managestockbooks" element={<EmployeRoute ><ManageStockBooks /></EmployeRoute>} />
 				<Route path="/employe/managestockmovies" element={<EmployeRoute ><ManageStockMovies /></EmployeRoute>} />
 				<Route path="/employe/managestockgames" element={<EmployeRoute ><ManageStockGames /></EmployeRoute>} />
+				<Route path="/employe/showusers" element={<EmployeRoute ><EmployeShowUsers /></EmployeRoute>} />
+				<Route path="/employe/showorders" element={<EmployeRoute ><SeeOrdersEmploye /></EmployeRoute>} />
 
 				<Route path="*" element={<ErrorNotFound />} />
 			</Routes>

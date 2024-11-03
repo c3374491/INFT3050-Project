@@ -56,12 +56,12 @@ const NavBarAdmin = () => {
                             </MenuItem>
                         </Menu>
                         <Button color="inherit">
-                            <NavLink to="/admin/manageproducts" style={{ textDecoration: 'none', color: 'white' }}>
+                            <NavLink to="/employe/showusers" style={{ textDecoration: 'none', color: 'white' }}>
                                 See Users
                             </NavLink>
                         </Button>
                         <Button color="inherit">
-                            <NavLink to="/admin/manageproducts" style={{ textDecoration: 'none', color: 'white' }}>
+                            <NavLink to="/employe/showorders" style={{ textDecoration: 'none', color: 'white' }}>
                                 See Orders
                             </NavLink>
                         </Button>

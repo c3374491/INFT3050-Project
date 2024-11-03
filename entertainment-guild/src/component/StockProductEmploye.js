@@ -110,8 +110,6 @@ const StockProductEmploye = ({ apiUrl, apiUrl2, searchTerm, genre}) => {
                         <tr>
                             <th>Name</th>
                             <th>Author</th>
-                            <th>Genre</th>
-                            <th>Subgenre</th>
                             <th>Quantity</th>
                             <th>Price</th>
                             <th>Edit</th>
@@ -122,20 +120,6 @@ const StockProductEmploye = ({ apiUrl, apiUrl2, searchTerm, genre}) => {
                             <tr key={index} className={index % 2 === 0 ? "evenRow" : "oddRow"}>
                                 <td>{product.Name}</td>
                                 <td>{product.Author}</td>
-                                <td>
-                                    {product.Genre === 1 ? (
-                                        <img src={bookIcon} alt="Genre 1" width="30px" />
-                                    ) : product.Genre === 2 ? (
-                                        <img src={movieIcon} alt="Genre 2" width="30px" />
-                                    ) : product.Genre === 3 ? (
-                                        <img src={gameIcon} alt="Genre 3" width="30px"/>
-                                    ) : (
-                                        <img src="no.png" alt="Default Genre" />
-                                    )}
-                                </td>
-                                <td>
-                                    {product.SubGenre}
-                                </td>
                                 <td>
                                     {product.Quantity}
                                 </td>

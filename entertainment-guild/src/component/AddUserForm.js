@@ -96,6 +96,7 @@ const AddUserForm = () => {
       Email: email,
       Name: name,
       IsAdmin: isAdmin ? 1 : 0, // Convert boolean to integer
+      IsEmploye : isEmploye ? 1 : 0,
       Salt: generatedSalt,
       HashPW: hashedPassword
     };

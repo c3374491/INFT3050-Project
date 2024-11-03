@@ -28,6 +28,7 @@ const Profile = () => {
 				<Box>
 					<h1>{authToken.username} Profile Page</h1>
 					{authToken.isAdmin && (<Alert severity="warning">CAUTION: You are logged in as an Admin!</Alert>)}
+					{authToken.isEmploye && (<Alert severity="warning">CAUTION: You are logged in as an Employe!</Alert>)}
 					<br />
 					<Box>
 						<Typography variant="h5" justifySelf="center">Welcome, {authToken.name}!</Typography>

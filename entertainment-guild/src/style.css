@@ -162,6 +162,28 @@ h2 {
     border-bottom: 1px solid #ddd;
 }
 
+.stockTableWrap {
+    max-height : 70vh;
+    overflow-y: auto;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+.stockTable {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stockTable th {
+    background-color: #f2f2f2;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
 .userTable th {
     background-color: #f2f2f2;
     position: sticky;
@@ -172,16 +194,6 @@ h2 {
 .userTable {
     width: 100%;
     border-collapse: collapse;
-}
-
-.userTable th, .userTable td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.userTable th {
-    background-color: #f2f2f2;
 }
 
 .evenRow {

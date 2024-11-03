@@ -12,7 +12,6 @@ const UserDeletePopup = ({ user, open, onClose }) => {
         console.log(user);
 
         try {
-            // Step 1: Get the user's product list
             const response = await axios.get(
                 `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
                 {
@@ -39,7 +38,6 @@ const UserDeletePopup = ({ user, open, onClose }) => {
                 };
 
                 console.log(updatedUser);
-                // Use axios to PATCH the user
                 const updateResponse = await axios.patch(
                     `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
                     updatedUser,
@@ -54,7 +52,6 @@ const UserDeletePopup = ({ user, open, onClose }) => {
 
                 console.log('User updated:', updateResponse.data);
             } else {
-                // Step 3: Delete the user if they have no products
                 await axios.delete(
                     `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${user.UserName}`,
                     {

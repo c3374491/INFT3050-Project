@@ -3,7 +3,7 @@
 // Last Updated: 02/11/2024
 
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, TextField, Button } from '@mui/material';
+import { Typography, Box, TextField, Button, MenuItem, Select, FormControl, InputLabel, FormHelperText } from '@mui/material';
 import axios from 'axios';
 import HandleCookies from '../helpers/HandleCookies';
 import PatronDeletePopup from '../component/PatronDeletePopup';
@@ -18,14 +18,14 @@ const ManageAccountDetails = () => {
         Suburb: '',
         State: ''
     });
-    const [error, setError] = useState(null);
+    const [error, setError] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
     const [openDeletePopup, setOpenDeletePopup] = useState(false);
 
     // Check if authToken is available
     useEffect(() => {
         if (!authToken || !authToken.email) { 
-            setError('User email not found. Please log in again.');
+            setError({ general: 'User email not found. Please log in again.' });
         }
     }, [authToken]);
 
@@ -36,19 +36,45 @@ const ManageAccountDetails = () => {
         });
     };
 
+    // Validation functions
+    const validateFields = () => {
+        const newErrors = {};
+
+        // Validate Street Address (contains both letters and numbers)
+        if (!/\d/.test(formData.StreetAddress) || !/[a-zA-Z]/.test(formData.StreetAddress)) {
+            newErrors.StreetAddress = 'Address must contain both letters and numbers (e.g., 377 Ring Road)';
+        }
+
+        // Validate Post Code (only numbers)
+        if (!/^\d+$/.test(formData.PostCode)) {
+            newErrors.PostCode = 'Post code must contain numbers only';
+        }
+
+        // Validate State (must be selected)
+        if (!formData.State) {
+            newErrors.State = 'Please select a state';
+        }
+
+        setError(newErrors);
+        return Object.keys(newErrors).length === 0; // Return true if no errors
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!authToken || !authToken.email) { 
-            setError('Unable to update account. Missing user email.');
+            setError({ general: 'Unable to update account. Missing user email.' });
             return;
         }
 
+        if (!validateFields()) {
+            return; // Stop submission if validation fails
+        }
+
         try {
-            // Prepare updated data for Patrons and TO tables
             const updatedPatron = {
                 Email: authToken.email,
-                Name: formData.name || undefined, // Only include if a name is provided
+                Name: formData.name || undefined,
             };
 
             const updatedTO = {
@@ -60,7 +86,6 @@ const ManageAccountDetails = () => {
                 State: formData.State || undefined
             };
 
-            // Update in Patrons table
             await axios.patch(
                 `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.id}`,
                 updatedPatron,
@@ -72,7 +97,6 @@ const ManageAccountDetails = () => {
                 }
             );
 
-            // Update in TO table
             await axios.patch(
                 `http://localhost:8080/api/v1/db/data/v1/inft3050/TO/${authToken.customerID}`,
                 updatedTO,
@@ -84,7 +108,6 @@ const ManageAccountDetails = () => {
                 }
             );
 
-            // Update auth token with new name, if provided
             const updatedToken = {
                 ...authToken,
                 name: formData.name || authToken.name
@@ -92,10 +115,10 @@ const ManageAccountDetails = () => {
             setAuthToken(updatedToken);
 
             setSuccessMessage('Account updated successfully!');
-            setError(null);
+            setError({});
         } catch (error) {
             console.error('Update failed', error);
-            setError(error.response?.data?.msg || 'Failed to update account. Please try again.');
+            setError({ general: error.response?.data?.msg || 'Failed to update account. Please try again.' });
         }
     };
 
@@ -139,6 +162,8 @@ const ManageAccountDetails = () => {
                         required
                         fullWidth
                         margin="normal"
+                        error={!!error.StreetAddress}
+                        helperText={error.StreetAddress}
                     />
                     <TextField
                         label="Post Code"
@@ -148,6 +173,8 @@ const ManageAccountDetails = () => {
                         required
                         fullWidth
                         margin="normal"
+                        error={!!error.PostCode}
+                        helperText={error.PostCode}
                     />
                     <TextField
                         label="Suburb"
@@ -158,15 +185,24 @@ const ManageAccountDetails = () => {
                         fullWidth
                         margin="normal"
                     />
-                    <TextField
-                        label="State"
-                        name="State"
-                        value={formData.State}
-                        onChange={handleInputChange}
-                        required
-                        fullWidth
-                        margin="normal"
-                    />
+                    <FormControl fullWidth margin="normal" required error={!!error.State}>
+                        <InputLabel>State</InputLabel>
+                        <Select
+                            name="State"
+                            value={formData.State}
+                            onChange={handleInputChange}
+                        >
+                            <MenuItem value="NSW">New South Wales</MenuItem>
+                            <MenuItem value="VIC">Victoria</MenuItem>
+                            <MenuItem value="QLD">Queensland</MenuItem>
+                            <MenuItem value="WA">Western Australia</MenuItem>
+                            <MenuItem value="SA">South Australia</MenuItem>
+                            <MenuItem value="TAS">Tasmania</MenuItem>
+                            <MenuItem value="ACT">Australian Capital Territory</MenuItem>
+                            <MenuItem value="NT">Northern Territory</MenuItem>
+                        </Select>
+                        {error.State && <FormHelperText>{error.State}</FormHelperText>}
+                    </FormControl>
                     <Button type="submit" variant="contained" fullWidth color="primary">
                         Update Account
                     </Button>
@@ -176,7 +212,7 @@ const ManageAccountDetails = () => {
                         </Button>
                     </Box>
                 </form>
-                {error && <Typography color="error">{error}</Typography>}
+                {error.general && <Typography color="error">{error.general}</Typography>}
                 {successMessage && <Typography color="primary">{successMessage}</Typography>}
             </Box>
             <PatronDeletePopup open={openDeletePopup} onClose={handleClosePopup} />

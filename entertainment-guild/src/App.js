@@ -21,6 +21,7 @@ import HandleCookies from './helpers/HandleCookies';
 import Checkout from "./pages/Checkout";
 import AdminRoute from "./component/AdminRoute";
 import ManageAccount from "./pages/ManageAccount.js";
+import OrderCompletion from './pages/OrderCompletion.js';
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
 				<Route path="/checkout" element={<Checkout />} />
 				<Route path="/productlistsearch" element={<ProductListSearch />} />
 				<Route path="/manageaccount" element={<ManageAccount />} />
+				<Route path="/ordercompletion" element={<OrderCompletion />} />
 
 				{/* Protect the admin routes */}
 				<Route path="/admin/management" element={<AdminRoute><Management /></AdminRoute>} />

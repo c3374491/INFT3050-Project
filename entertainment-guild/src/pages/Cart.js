@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from "@mui/material";
+import { Box, Alert } from "@mui/material";
 import HandleCookies from "../helpers/HandleCookies";
 import CartProductList from "../component/CartProductList";
 import axios from "axios";
@@ -77,6 +77,7 @@ const Cart = () => {
         <div>
             <Box display="flex" justifyContent="center">
                 <Box>
+					{authToken.isAdmin && (<div><br /> <Alert severity="error">CAUTION: You are logged in as an Admin!</Alert></div>)}
                     <h1>Your Cart</h1>
                     {/* Show products in the cart */}
                     <CartProductList productList={products}/>

@@ -17,6 +17,7 @@ const ShowUsers = ({ apiUrl1,apiUrl2, searchTerm}) => {
     const [error, setError] = useState(null);
     const [isOpenEdit, setOpenEdit] = useState(false);
     const [isOpenDelete, setOpenDelete] = useState(false);
+    const [onlyAdminEmploye, setOnlyAdminEmploye] = useState(null);
 
     
     // Get handleOpenPopup and handleClosePopup functions from https://mui.com/material-ui/react-dialog/
@@ -63,7 +64,18 @@ const ShowUsers = ({ apiUrl1,apiUrl2, searchTerm}) => {
                 ]);
 
                 // Combine the lists from both responses
-                const combinedUsers = [...response1.data.list, ...response2.data.list];
+                const combinedUsers = [
+                    ...response1.data.list.map(user => ({
+                        ...user,
+                        IsAdmin: user.IsAdmin, 
+                        IsEmployee: !user.IsAdmin
+                    })),
+                    ...response2.data.list.map(user => ({
+                        ...user,
+                        IsAdmin: false, 
+                        IsEmployee: false
+                    }))
+                ];
 
                 // Filter out null names and update the state
                 const filteredUsers = combinedUsers.filter(user => user.Name !== null);
@@ -97,6 +109,7 @@ const ShowUsers = ({ apiUrl1,apiUrl2, searchTerm}) => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Admin</th>
+                        <th>Employe</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -109,8 +122,9 @@ const ShowUsers = ({ apiUrl1,apiUrl2, searchTerm}) => {
                             <td>{user.Name}</td>
                             <td>{user.Email ? user.Email : "No Email"}</td>
                             <td>{user.IsAdmin ? "Yes" : "No"}</td>
+                            <td>{user.IsEmployee ? "Yes" : "No"}</td>
                             <td>
-                                <button onClick={() => handleOpenPopup(user)} className="editButton">
+                            <button onClick={() => handleOpenPopup(user)} className="editButton">
                                     <img src={editIcon} alt="Edit Button Icon" className="editImage"/>
                                 </button>
                                 <button onClick={() => handleDeleteUser(user)} className="deleteButton">

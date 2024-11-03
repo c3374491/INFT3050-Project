@@ -18,13 +18,6 @@ const ManageAccountPassword = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Check if authToken and user ID are available
-    useEffect(() => {
-        if (!authToken || !authToken.email) { 
-            setError('User ID not found. Please log in again.');
-        }
-    }, [authToken]);
-
     const handleInputChange = (e) => {
         setFormData({
             ...formData,
@@ -34,9 +27,8 @@ const ManageAccountPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         // Check for authToken and user ID before proceeding
-        if (!authToken || !authToken.id) { // Check for userID
+        if (!authToken ) { // Check for userID
             setError('Unable to update account. Missing user ID.');
             return;
         }
@@ -50,7 +42,10 @@ const ManageAccountPassword = () => {
         try {
             // Hash the current password for verification
             const hashedCurrentPassword = await sha256(authToken.salt + formData.currentPassword);
-
+            
+            console.log(hashedCurrentPassword)
+            console.log(authToken)
+            console.log(formData.currentPassword)
             // Check if the current password matches the one in the authToken (hashed)
             if (hashedCurrentPassword !== authToken.hashPW) {
                 setError('Current password is incorrect');
@@ -65,19 +60,35 @@ const ManageAccountPassword = () => {
                 HashPW: newHashedPassword,
                 Salt: authToken.salt // Keep the salt
             };
-
-            // Use a PATCH request to the correct URL using the patron's UserID as the identifier
-            const response = await axios.patch(
-                `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.id}`, // Use UserID in the URL path
-                updatedUser,
-                {
-                    headers: 
+            
+            if (authToken.userID) {
+                // Use a PATCH request to the correct URL using the patron's UserID as the identifier
+                const response = await axios.patch(
+                    `http://localhost:8080/api/v1/db/data/v1/inft3050/Patrons/${authToken.userID}`, // Use UserID in the URL path
+                    updatedUser,
                     {
-                        'Content-Type': 'application/json',
-                        'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ' // Auth token for API
+                        headers:
+                            {
+                                'Content-Type': 'application/json',
+                                'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ' // Auth token for API
+                            }
                     }
-                }
-            );
+                );
+            } else {
+                const response = await axios.patch(
+                    `http://localhost:8080/api/v1/db/data/v1/inft3050/User/${authToken.username}`, // Use username in the URL path
+                    updatedUser,
+                    {
+                        headers:
+                            {
+                                'Content-Type': 'application/json',
+                                'xc-token': 'sPi8tSXBw3BgursDPmfAJz8B3mPaHA6FQ9PWZYJZ' // Auth token for API
+                            }
+                    }
+                );
+            }
+
+            
 
             // Update the token with the new hashed password and name
             const updatedToken = { 
